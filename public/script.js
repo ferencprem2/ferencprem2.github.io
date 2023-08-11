@@ -1,8 +1,65 @@
 const chatContent = document.getElementById('chat-content');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
+const chatbotIcon = document.getElementById('chatbot-icon');
+const chatbox = document.querySelector('.chatbox');
+const helpText = document.getElementById('help-text');
+let offerDatasArray = [];
 
-// Function to add a message to the chatbox
+
+
+
+//Send button and send with enter key
+sendBtn.addEventListener('click', handleUserInput);
+userInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        handleUserInput();
+    }
+});
+
+//Clickable chatbot icon
+chatbotIcon.addEventListener('click', function() {
+  chatbox.style.display = 'block';   // Display chatbox
+  helpText.style.display = 'none';   // Hide help text
+  chatbotIcon.style.display = 'none';   // Hide chatbot icon
+  // You can initiate the chat sequence here if needed:
+  setTimeout(() => askNextQuestion(), 1000);
+});
+
+chatbox.addEventListener('click', function() {
+  chatbox.style.display = 'none';    // Hide chatbox
+  chatbotIcon.style.display = 'block';  // Show chatbot icon
+  helpText.style.display = 'block';  // Show help text
+});
+
+const menuQuestions = [
+  "Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon \n a következő lehetőségek közül: \n \t -ingyenes felmérés igénylése \n \t -árajánlat kérése meglévő méretek alapján \n \t -érdeklődés \n \t -aktuális akcióinkról történő tájékozódás \n \t -ügyfélszolgálat"
+]
+
+const freeMeasurementQuestions = [
+  'Adja meg a teljes nevét:',
+  'Adja meg a megye nevét:',
+  'Adja meg az irányítószámát:',
+  'Adja meg települése nevét:',
+  'Adja meg utcája nevét:',
+  'Ajda meg a házszámát:',
+  'Adja meg email címét:',
+  'Adja meg telefonszámát:',
+  'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
+  'Adja meg a ponyva típusát(terasz ponyva, filagória ponyva, kocsi beálló, egyéb):',
+  'Amennyiben vissza szeretne lépni a főmenübe, írja: (vissza):'
+];
+
+const offerQuestions = [
+  'Adja meg a nevét: ',
+  'Adja meg hány darab ponyvát szeretne: '
+]
+
+const offerSideMenuQuestions = [
+  "Kérem válasszon az alábbi lehetőségek közül: \n \t Képlet alapján általános árajánlat látványtervvel \n \t 3D tervezés"
+]
+
+//Decides whether the question is bot response or user response and puts the output into the corresponting container
 function addMessage(message, isBot) {
   const messageContainer = document.createElement('div');
   messageContainer.classList.add(isBot ? 'bot-message' : 'user-message');
@@ -10,7 +67,7 @@ function addMessage(message, isBot) {
   chatContent.appendChild(messageContainer);
 }
 
-// Function to add a message to the chatbox with typewriter animation
+//Displays the bot response with animation
 function addMessageWithAnimation(message, isBot) {
   const messageContainer = document.createElement('div');
   messageContainer.classList.add(isBot ? 'bot-message' : 'user-message');
@@ -25,183 +82,111 @@ function addMessageWithAnimation(message, isBot) {
   const typingInterval = setInterval(() => {
     if (charIndex < message.length) {
       const currentChar = message.charAt(charIndex);
-      if (currentChar === ' ') {
-        typingAnimation.innerHTML += '&nbsp;'; // Preserve spaces in the animation
-      } else {
-        typingAnimation.innerText += currentChar;
-      }
+      typingAnimation.innerHTML += (currentChar === ' ') ? '&nbsp;' : currentChar;
       charIndex++;
     } else {
       clearInterval(typingInterval);
     }
-  }, 10); // Speed of typing (adjust as needed)
+  }, 10);
 }
 
-// Function to validate user input for each question separately
-function validateInput(questionIndex, input) {
-  switch (questionIndex) {
-    // case 0: // Third question: Full name validation
-    //   const namePattern = /^[a-zA-Z\s]+$/;
-    //   if (namePattern.test(input)) {
-    //     return { valid: true, type: 'name', value: input };
-    //   } else {
-    //     return { valid: false, type: null, value: null };
-    //   }
 
-    // case 3: // Fourth question: Age validation
-    //   const age = parseInt(input);
-    //   if (!isNaN(age) && age >= 18 && age <= 120) {
-    //     return { valid: true, type: 'age', value: age };
-    //   } else {
-    //     return { valid: false, type: null, value: null };
-    //   }
-
-    case 7: // Email validation
-      const emailPattern = /^\S+@\S+\.\S+$/;
-      return { valid: emailPattern.test(input), type: 'email', value: input };
-
-    case 8: // Phone number validation
-      const phonePattern = /^\+\d{10,}$/;
-      return { valid: phonePattern.test(input), type: 'phone', value: input };
-
-    case 9: // Measurement time validation (time cannot be before tomorrow's date)
-      const measurementTime = new Date(input);
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const isValidTime = !isNaN(measurementTime) && measurementTime > tomorrow;
-      return { valid: isValidTime, type: 'measurementTime', value: measurementTime };
-
-    default:
-      return { valid: false, type: null, value: null };
-  }
-}
-
-// Array to store the validated answers
-const answers = [];
-
-// Function to handle user input
+//Function that handles the user inputs, and displays the questions referring to the user input
 function handleUserInput() {
   const userMessage = userInput.value.trim();
-  if (userMessage !== '') {
-    addMessage(userMessage, false);
-    userInput.value = '';
+  addMessage(userMessage, false);  // We should specify that this is a user message
+  
+  if (userMessage === '') return;
+  userInput.value = '';
 
-    // If we're at the main menu, handle the menu selection
-    if (currentQuestions === menuQuestions) {
-      handleMainMenuSelection(userMessage);
-      return; // Exit the function since we've handled the menu selection
+  if (currentQuestions === freeMeasurementQuestions && userMessage.toLowerCase() === "vissza") {
+    currentQuestions = menuQuestions;
+    currentQuestionIndex = 0;
+    askNextQuestion();
+    return;  // Return early to prevent further processing
+  }
+
+  if (currentQuestions === offerQuestions && userMessage.toLowerCase() === "vissza") {
+    currentQuestions = menuQuestions;
+    currentQuestionIndex = 0;
+    askNextQuestion();
+    return;  // Return early to prevent further processing
+  }
+
+  if (currentQuestions === offerQuestions) {
+    console.log(userMessage)
+    offerDatasArray.push(userMessage) 
+    
+    if (currentQuestionIndex == 1) {
     }
 
-    if (currentQuestions === freeMeasurementQuestions) {
-      // Same validation and answer handling as before
-      // ...
-
-      if (currentQuestionIndex >= currentQuestions.length) { // Check if all questions have been asked
-        saveMeasurementData(answers); // Save answers
-        addMessageWithAnimation("Vissza szeretne lépni a főmenübe? (igen/nem): ", true);
-        askingReturnToMenu = true; // Set flag to track that we're asking to return to the main menu
+    if (currentQuestionIndex == 2) {  // This means we are on the "number of tarps" question
+      const numberOfTarps = parseInt(userMessage);
+    
+      if (numberOfTarps > 0) {
+        // Dynamically generate questions based on the number of tarps
+        for (let i = 1; i <= numberOfTarps; i++) {
+          offerQuestions.push(`Adja meg a ${i}. ponyva szélességét:`);
+          offerQuestions.push(`Adja meg a ${i}. ponyva magasságát:`);
+          offerQuestions.push(`Szeretne-e ajtó a(z) ${i}. ponyvába? (igen/nem):`)
+          offerQuestions.push(`Adja meg a ${i}. színét:`)
+        }
+        offerQuestions.push('Szeretne visszatérni a főmenübe? (igen/nem):');
       } else {
-        askNextQuestion(); // Move to the next question
+      addMessage('Kérem valós ponyvaszámot adjon meg!', true);
+      return;
       }
-
-
-
-    if (currentQuestions === freeMeasurementQuestions) {
-      const validation = validateInput(currentQuestionIndex - 1, userMessage)
-      if (validation.valid) {
-        answers.push({type: validation.type, value: validation.value});
-      }
-
-      if (currentQuestionIndex === currentQuestionIndex.length) {
-        saveMeasurementData(answers);
-        // addMessageWithAnimation("Vissza szeretne lépni a főmenübe? (igen/nem): ", true)
-      } else {
-        askNextQuestion();
-      }
-    } else {
-      alert('Kérem létező opciót válasszon');
     }
-
-    if (userMessage === 'igen') { // If the user says "yes" (igen)
-      currentQuestions = menuQuestions;
-      currentQuestionIndex = 0;
-      askNextQuestion(); // Return to main menu
-    } else if (userMessage === 'nem') { // If the user says "no" (nem)
-      addMessage('Köszönöm, hogy igénybe vette szolgáltatásunkat!', true); // Thank you message
-    } else {
-      addMessage('Kérem, válaszoljon "igen" vagy "nem".', true); // Invalid response
-    }
-    askingReturnToMenu = false; // Reset flag
+    askNextQuestion();
     return;
+  } 
+  
+  
+  switch (currentQuestions) { }
 
+  if (currentQuestions === menuQuestions) {
+    handleMainMenuSelection(userMessage);
+    return;
+  }
+
+  // The function name was "daveData", I believe you meant "saveData"
+  if (currentQuestionIndex === currentQuestions.length) {
+    // saveData(answers);  // You need to define this function and the answers array logic
+  } else {
+    askNextQuestion();
   }
 }
-}
 
-function saveMeasurementData(data) {
-  const jsonData = JSON.stringify(data);
-  fs.writeFile('measurementDatas.json', jsonData, (err) => {
-    if (err) {
-      console.error('An error occurred while saving the data:', err);
-    } else {
-      console.log('Data saved successfully');
-    }
-  });
-}
+// for (let i = 1; i < offerDatasArray.length; i += 4) {
+//   let tarpNum = (i + 3) / 4; // Calculate the tarp number
+//     jsonData[username][`${tarpNum}._tarpWidth`] = userResponses[i];
+//     jsonData[username][`${tarpNum}._tarpHeight`] = userResponses[i + 1];
+//     jsonData[username][`${tarpNum}._tarpDoor`] = userResponses[i + 2];
+//     jsonData[username][`${tarpNum}._tarpColor`] = userResponses[i + 3];
+// }
 
-let backToMenu = false;
+
 let currentQuestions;
 let currentQuestionIndex = 0;
 
 function handleMainMenuSelection(selection) {
-  switch(selection.toLowerCase()) {
-    case 'ingyenes':
-      addMessageWithAnimation(
-        'Ingyenes felmérés igénylésének a menete a következő: \n Ön megadja a kért elérhetőségeit és kolléganőnk telefonon \n egyeztet Önnel egy időpontot amikor területi képviselő \n kollégánk fel fogja Önt keresni. \n A helyszíni felmérés során kollégánkkal mindent meg tud \n beszélni és egyeztetni tudja az elképzeléseit.\n Ezt követően a lemért méretek alapján a helyszínen \n elkészítünk egy árajánlatot amely a kiadástól számítva 2 hétig érvényes. \n Kérjük adja meg a következő adatokat:',true);
-      currentQuestionIndex = 0;
-      currentQuestions = freeMeasurementQuestions;
-      setTimeout(measurementHandlerFunction, 5000); // Adds a 5-second delay before asking the next question
-      break;
-    case '':
-      addMessage('You have selected Offers!', true);
-      // Handle offers here or ask the next question
-      break;
-    case 'vissza':
 
-    default:
-      addMessage('Invalid selection! Please choose either "free measurements" or "offers".', true);
-      break;
+  if (selection.includes("ingy")) {
+    addMessageWithAnimation('Ingyenes felmérés igénylésének a menete...', true); // the message has been shortened for brevity
+    currentQuestions = freeMeasurementQuestions;
+    currentQuestionIndex = 0;
+    setTimeout(measurementHandlerFunction, 5000);
+  }
+  else if (selection.includes("ár")) {
+    currentQuestions = offerQuestions;
+    currentQuestionIndex = 0;
+    currentTarpNumber = 1;
+    askNextQuestion();
+  }
+  else {
+    addMessage('Kérem a meglévő opciók közül válasszon', true);
   }
 }
-
-
-
-// Function to send the answers to the server using a POST request
-function sendAnswersToServer(answers) {
-  const url = '/answers';
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(answers),
-  };
-
-  fetch(url, requestOptions)
-    .then((response) => {
-      if (response.ok) {
-        // If the response status is 200-299 (successful), display success message
-        console.log('Server response:', response.status, response.statusText);
-        displaySuccessMessage();
-      } else {
-        throw new Error('Failed to send data to server.');
-      }
-    })
-    .catch((error) => {
-      console.error('Error sending data to server:', error);
-    });
-}
-
 
 function measurementHandlerFunction() {
   currentQuestionIndex = 0;
@@ -209,59 +194,21 @@ function measurementHandlerFunction() {
   askNextQuestion();
 }
 
-// Function to display success message to the user
-function displaySuccessMessage() {
 
-  addMessage(successMessage, true);
-}
-
-// Function to add a bot question and ask it with animation
-function askQuestionWithAnimation(question) {
-  addMessageWithAnimation(question, true);
-}
-
-// Array of bot questions
-const menuQuestions = [
-  "Üdvözöljük a ponyvaexpressz oldalán, kérem vállasszon \n a következő lehetőségek közül: \n \t ingyenes felmérés igénylése \n \t árajánlat kérése meglévő méretek alapján \n \t érdeklődés \n \t aktuális akcióinkról történő tájékozódás \n \t ügyfélszolgálat"
-]
-
-
-const freeMeasurementQuestions = [
-  'Adja meg a teljes nevét:',
-  'Adja meg a megye nevét:',
-  'Adja meg az irányítószámát:',
-  'Adja meg települése nevét:',
-  'Adja meg utcája nevét:',
-  'Ajda meg a házszámát:',
-  'Adja meg email címét:',
-  'Adja meg telefonszámát:',
-  'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-  'Adja meg a ponyva típusát(terasz ponyva, filagória ponyva, kocsi beálló, egyéb):'
-];
-
-const offerSideMenuQuestions = [
-  "Kérem válasszon az alábbi lehetőségek közül: \n \t Képlet alapján általános árajánlat látványtervvel \n \t 3D tervezés"
-]
-
-const offerQuestions = [
-
-]
-
-// Function to ask the next bot question
+//function that goes to the next question
 function askNextQuestion() {
   if (currentQuestionIndex < currentQuestions.length) {
-    askQuestionWithAnimation(currentQuestions[currentQuestionIndex]);
+    addMessageWithAnimation(currentQuestions[currentQuestionIndex], true);
     currentQuestionIndex++;
-  } else {
-    // No more questions, conversation completed
-    addMessageWithAnimation('Ha vissza szeretne menni a főmenübe írja (vissza):', true);
-
+  } else if (currentQuestions === freeMeasurementQuestions) {
+    addMessageWithAnimation('Ha vissza szeretne menni írja (vissza):', true);
   }
 }
 
-// Event listener for the send button
-sendBtn.addEventListener('click', handleUserInput);
 
-// Start the conversation by asking the first question
+
+//Assign the menu questions at the start
 currentQuestions = menuQuestions;
-setTimeout(() => askNextQuestion(), 1000);
+window.onload = function() {
+  chatbox.style.display = 'none';
+};

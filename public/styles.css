@@ -1,67 +1,127 @@
-/* Styling for the chatbox and user input section */
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  .chatbox {
-    width: 100%;
-    max-width: 700px;
-    margin: 20px auto;
-    border: 1px solid #a60404;
-    padding: 10px;
-    border-radius: 5px;
+  font-family: 'Arial', sans-serif;
+  position: relative;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+}
+.chatbox-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     display: flex;
-    flex-direction: column; /* Change to a vertical layout */
-  }
-  
-  /* Bot messages */
-  .bot-message {
-    background-color: #f1f0f0;
-    color: #000;
-    padding: 8px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    max-width: 70%;
-  }
-  
-  /* User messages */
-  .user-message {
-    background-color: #a60404;
-    color: #fff;
-    padding: 8px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    max-width: 70%;
-    align-self: flex-end; /* Align user messages to the right side */
-  }
-  
-  /* Typing animation */
-  .typing-animation {
-    display: inline-block;
-    overflow: hidden;
-    animation: typing 0.5s steps(20, end);
-  }
-  
-  /* User input */
-  .user-input {
-    display: flex;
-    align-items: center; /* Align input field and button horizontally */
-  }
-  
-  .user-input input[type="text"] {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 5px;
-  }
-  
-  .user-input button {
-    padding: 8px 15px;
-    background-color: #a60404;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+}
+
+.chat-icon {
+    position: relative;
     cursor: pointer;
-  }
-  
+    z-index: 10;
+}
+
+.chat-icon i {
+    font-size: 2rem;
+    color: #007BFF;
+}
+
+.chat-prompt {
+    position: absolute;
+    right: 80px;
+    bottom: 5px;
+    background-color: #007BFF;
+    color: #FFF;
+    padding: 5px 10px;
+    border-radius: 10px;
+    animation: bounce 1s infinite;
+}
+.chat-content {
+  padding: 10px;
+  flex: 1;
+}
+
+#chatbot-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  width: 101px;
+  height: 51px;
+  cursor: pointer;
+  background-image: url('PonyvaexpresszLogo.PNG'); /* Replace with your chatbot icon image */
+  background-size: cover;
+  z-index: 1000;
+}
+
+#help-text {
+  position: absolute;
+  bottom: 70px;
+  right: 10px;
+  color: #a60303;
+  animation: jump 1s infinite;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+@keyframes jump {
+  0%   {transform: translateY(0);}
+  50%  {transform: translateY(-10px);}
+  100% {transform: translateY(0);}
+}
+
+.chatbox {
+  width: 420px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #007BFF;
+    color: #FFF;
+}
+
+.user-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+#user-input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+
+#send-btn {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+#send-btn:hover {
+    background-color: #0056b3;
+}
+
+#close-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #FFF;
+}
