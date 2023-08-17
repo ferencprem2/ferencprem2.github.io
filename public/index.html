@@ -6,6 +6,10 @@
 </head>
 <body>
   <div class="chatbox" id="chatbox">
+    <div class="chat-header">
+      <span class="bot-name">PonyvaBOT</span>
+      <div class="chatbot-header-icon" id="chatbot-header-icon"></div>
+  </div>
     <div class="chat-content" id="chat-content">
       <!-- Bot and user messages will be dynamically added here -->
     </div>
@@ -14,11 +18,16 @@
       <button id="send-btn">Send</button>
     </div>
   </div>
+  <div id="results">
+    <div id="resultContent"></div>
+    <button id="sendButton">Küldés</button>
+  </div>
 
   <!-- Chatbot Icon and Help Text -->
   <div id="chatbot-icon"></div>
   <span id="help-text">Segítségért kattintson ide</span>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
+  <script type="module"  src="resultSummary.js"></script>
 </body>
 </html>

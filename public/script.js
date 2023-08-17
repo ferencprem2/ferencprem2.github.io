@@ -1,3 +1,5 @@
+import { showSummary } from "./resultSummary.js";
+
 const chatContent = document.getElementById('chat-content');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
@@ -5,8 +7,7 @@ const chatbotIcon = document.getElementById('chatbot-icon');
 const chatbox = document.querySelector('.chatbox');
 const helpText = document.getElementById('help-text');
 let numberOfTarps;
-let offerDatasArray = [];
-
+export let offerDatasArray = [];
 
 
 
@@ -49,7 +50,7 @@ const freeMeasurementQuestions = [
   'Amennyiben vissza szeretne lépni a főmenübe, írja: (vissza):'
 ];
 
-const offerQuestions = [
+export const offerQuestions = [
   'Adja meg a nevét: ',
   'Adja meg hány darab ponyvát szeretne: '
 ]
@@ -59,7 +60,7 @@ const offerSideMenuQuestions = [
 ]
 
 //Decides whether the question is bot response or user response and puts the output into the corresponting container
-function addMessage(message, isBot) {
+export function addMessage(message, isBot) {
   const chatContent = document.getElementById('chat-content');
   const messageDiv = document.createElement('div');
   messageDiv.classList.add('message');
@@ -117,100 +118,95 @@ function handleUserInput() {
     return;  // Return early to prevent further processing
   }
 
-    if (currentQuestions === offerQuestions) {
-      console.log(userMessage);
-      offerDatasArray.push(userMessage);
-      console.log(currentQuestionIndex);
+  if (currentQuestions === offerQuestions) {
+    console.log(userMessage);
+    console.log(currentQuestionIndex);
 
 
-      // First question (Name):
-      if (currentQuestionIndex == 1) {
-          const numberMessage = Number(userMessage);
-          // TODO felesleges kihozni változóba, mert egyelőre nem használod sehol.
-          if (!isNaN(numberMessage) || userMessage === "") {
-              addMessage('Kérem nevet adjon meg', true);
-              return;
-          }
+    // First question (Name):
+    if (currentQuestionIndex == 1) {
+      const numberMessage = Number(userMessage);
+      offerDatasArray.push(userMessage)
+      if (!isNaN(numberMessage) || userMessage === "") {
+          addMessage('Kérem nevet adjon meg', true);
+          return;
       }
-      // Second question (Number of tarps):
-      if (currentQuestionIndex == 2) {
-          numberOfTarps = parseInt(userMessage);
-          if (isNaN(numberOfTarps) || numberOfTarps <= 0) {
-              addMessage('Kérem valós ponyvaszámot adjon meg!', true);
-              return;
-          }
+      // TODO felesleges kihozni változóba, mert egyelőre nem használod sehol.
+    }
 
-          for (let i = 1; i <= numberOfTarps; i++) {
-              offerQuestions.push(`Adja meg a ${i}. ponyva szélességét:`);
-              offerQuestions.push(`Adja meg a ${i}. ponyva magasságát:`);
-              offerQuestions.push(`Szeretne-e ajtó a(z) ${i}. ponyvába? (igen/nem):`);
-              offerQuestions.push(`Adja meg a ${i}. színét:`);
-          }
-          offerQuestions.push('Szeretne visszatérni a főmenübe? (igen/nem):');
-          askNextQuestion();
+    // Second question (Number of tarps):
+    if (currentQuestionIndex == 2) {
+      numberOfTarps = parseInt(userMessage);
+      offerDatasArray.push(numberOfTarps)
+      if (isNaN(numberOfTarps) || numberOfTarps <= 0) {
+          addMessage('Kérem valós ponyvaszámot adjon meg!', true);
           return;
       }
 
-      if(currentQuestionIndex > numberOfTarps * 4 + 2) {
-        const lowerCaseMessage = userMessage.toLowerCase();
-        if (lowerCaseMessage === 'igen') {
-            currentQuestions = menuQuestions;
-            currentQuestionIndex = 0;
-            askNextQuestion();
-            return;
-          } 
-          
-        addMessage(lowerCaseMessage === 'nem' ? 'Köszönjük válaszait' : 'Kérem igennel vagy nemmel válaszoljon', true);
+        for (let i = 1; i <= numberOfTarps; i++) {
+            offerQuestions.push(`Adja meg a ${i}. ponyva szélességét:`);
+            offerQuestions.push(`Adja meg a ${i}. ponyva magasságát:`);
+            offerQuestions.push(`Szeretne-e ajtó a(z) ${i}. ponyvába? (igen/nem):`);
+            offerQuestions.push(`Adja meg a ${i}. színét:`);
+        }
+        askNextQuestion();
         return;
+    }
+
+    if(currentQuestionIndex > numberOfTarps * 4 + 2) {
+      const lowerCaseMessage = userMessage.toLowerCase();
+      if (lowerCaseMessage === 'igen') {
+          currentQuestions = menuQuestions;
+          currentQuestionIndex = 0;
+          askNextQuestion();
+          return;
+        } 
         
-        // TODO Én így csinálnám 
-
-        // else if (lowerCaseMessage === 'nem') {
-        //     addMessage('Köszönjük válaszait', true);
-        //     return;
-        // } else {
-        //     addMessage('Kérem igennel vagy nemmel válaszoljon', true);
-        //     return;
-        // }
-      }
-
-      // Width:
-      if (currentQuestionIndex >= 3 && (currentQuestionIndex - 3) % 4 === 0) {
-          if (isNaN(Number(userMessage))) {
-              addMessage('Kérem valós számot adjon meg a szélességhez!', true);
-              return;
-          }
-      }
-
-      // Height:
-      if (currentQuestionIndex >= 4 && (currentQuestionIndex - 4) % 4 === 0) {
-          if (isNaN(Number(userMessage))) {
-              addMessage('Kérem valós számot adjon meg a magassághoz!', true);
-              return;
-          }
-      }
-
-      // Door:
-      if (currentQuestionIndex >= 5 && (currentQuestionIndex - 5) % 4 === 0) {
-          const lowerCaseMessage = userMessage.toLowerCase();
-          if ((lowerCaseMessage != 'igen') && (lowerCaseMessage != 'nem')) {
-              addMessage('Kérem igennel vagy nemmel válaszoljon', true);
-              return;
-          }
-      }
-
-      // Color:
-      if (currentQuestionIndex >= 6 && (currentQuestionIndex - 6) % 4 === 0) {
-          const numberMessage = Number(userMessage);
-          if (!isNaN(numberMessage) || userMessage === "") {
-              addMessage('Kérem színt adjon meg', true);
-              return;
-          }
-      }
-
-      // Check for return to main menu:
-      askNextQuestion();
+      addMessage(lowerCaseMessage === 'nem' ? 'Köszönjük válaszait' : 'Kérem igennel vagy nemmel válaszoljon', true);
       return;
+    }
+
+    // Width:
+    if (currentQuestionIndex >= 3 && (currentQuestionIndex - 3) % 4 === 0) {
+      offerDatasArray.push(userMessage)
+        if (isNaN(Number(userMessage))) {
+            addMessage('Kérem valós számot adjon meg a szélességhez!', true);
+            return;
+        }
+    }
+
+    // Height:
+    if (currentQuestionIndex >= 4 && (currentQuestionIndex - 4) % 4 === 0) {
+      offerDatasArray.push(userMessage)
+        if (isNaN(Number(userMessage))) {
+            addMessage('Kérem valós számot adjon meg a magassághoz!', true);
+            return;
+        }
+    }
+
+    // Door:
+    if (currentQuestionIndex >= 5 && (currentQuestionIndex - 5) % 4 === 0) {
+      const lowerCaseMessage = userMessage.toLowerCase();
+        offerDatasArray.push(lowerCaseMessage)
+        if ((lowerCaseMessage != 'igen') && (lowerCaseMessage != 'nem')) {
+            addMessage('Kérem igennel vagy nemmel válaszoljon', true);
+            return;
+        }
+    }
+
+    // Color:
+    if (currentQuestionIndex >= 6 && (currentQuestionIndex - 6) % 4 === 0) {
+        offerDatasArray.push(userMessage)
+        const numberMessage = Number(userMessage);
+        if (!isNaN(numberMessage) || userMessage === "") {
+            addMessage('Kérem színt adjon meg', true);
+            return;
+        }
+    }
+
+    // Check for return to main menu:
+    askNextQuestion();
+    return;
   }
 
   if (currentQuestions === menuQuestions) {
@@ -218,9 +214,7 @@ function handleUserInput() {
     return;
   }
 
-  // The function name was "daveData", I believe you meant "saveData"
   if (currentQuestionIndex === currentQuestions.length) {
-    // saveData(answers);  // You need to define this function and the answers array logic
   } else {
     askNextQuestion();
   }
@@ -231,7 +225,6 @@ let currentQuestions;
 let currentQuestionIndex = 0;
 
 function handleMainMenuSelection(selection) {
-
   if (selection.includes("ingy")) {
     addMessageWithAnimation('Ingyenes felmérés igénylésének a menete...', true); // the message has been shortened for brevity
     currentQuestions = freeMeasurementQuestions;
@@ -241,7 +234,6 @@ function handleMainMenuSelection(selection) {
   else if (selection.includes("ár")) {
     currentQuestions = offerQuestions;
     currentQuestionIndex = 0;
-    currentTarpNumber = 1;
     askNextQuestion();
   }
   else {
@@ -265,6 +257,10 @@ function askNextQuestion() {
       // Optionally, you can add a message indicating the end of the questions.
       //TODO: BUG
       addMessageWithAnimation('Kérdések vége. Köszönjük!', true);
+      switch(currentQuestions){
+        case offerQuestions:
+          showSummary(offerDatasArray, offerQuestions)
+      }
   }
 }
 
