@@ -144,8 +144,8 @@ function handleUserInput() {
       }
 
         for (let i = 1; i <= numberOfTarps; i++) {
-            offerQuestions.push(`Adja meg a ${i}. ponyva szélességét:`);
-            offerQuestions.push(`Adja meg a ${i}. ponyva magasságát:`);
+            offerQuestions.push(`Adja meg a ${i}. ponyva szélességét centiméterben:`);
+            offerQuestions.push(`Adja meg a ${i}. ponyva magasságát centiméterben:`);
             offerQuestions.push(`Szeretne-e ajtó a(z) ${i}. ponyvába? (igen/nem):`);
             offerQuestions.push(`Adja meg a ${i}. színét:`);
         }
@@ -168,40 +168,44 @@ function handleUserInput() {
 
     // Width:
     if (currentQuestionIndex >= 3 && (currentQuestionIndex - 3) % 4 === 0) {
-      offerDatasArray.push(userMessage)
-        if (isNaN(Number(userMessage))) {
-            addMessage('Kérem valós számot adjon meg a szélességhez!', true);
-            return;
-        }
+      if (isNaN(Number(userMessage))) {
+          addMessage('Kérem valós számot adjon meg a szélességhez!', true);
+          return;
+      } else {
+        offerDatasArray.push(userMessage)
+      }
     }
 
     // Height:
     if (currentQuestionIndex >= 4 && (currentQuestionIndex - 4) % 4 === 0) {
-      offerDatasArray.push(userMessage)
-        if (isNaN(Number(userMessage))) {
-            addMessage('Kérem valós számot adjon meg a magassághoz!', true);
-            return;
-        }
+      if (isNaN(Number(userMessage))) {
+        addMessage('Kérem valós számot adjon meg a magassághoz!', true);
+        return;
+      } else {
+        offerDatasArray.push(userMessage)
+      }
     }
 
     // Door:
     if (currentQuestionIndex >= 5 && (currentQuestionIndex - 5) % 4 === 0) {
       const lowerCaseMessage = userMessage.toLowerCase();
+      if ((lowerCaseMessage != 'igen') && (lowerCaseMessage != 'nem')) {
+        addMessage('Kérem igennel vagy nemmel válaszoljon', true);
+        return;
+      } else {
         offerDatasArray.push(lowerCaseMessage)
-        if ((lowerCaseMessage != 'igen') && (lowerCaseMessage != 'nem')) {
-            addMessage('Kérem igennel vagy nemmel válaszoljon', true);
-            return;
-        }
+      }
     }
 
     // Color:
     if (currentQuestionIndex >= 6 && (currentQuestionIndex - 6) % 4 === 0) {
+      const numberMessage = Number(userMessage);
+      if (!isNaN(numberMessage) || userMessage === "") {
+        addMessage('Kérem színt adjon meg', true);
+        return;
+      } else {
         offerDatasArray.push(userMessage)
-        const numberMessage = Number(userMessage);
-        if (!isNaN(numberMessage) || userMessage === "") {
-            addMessage('Kérem színt adjon meg', true);
-            return;
-        }
+      }
     }
 
     // Check for return to main menu:
@@ -231,7 +235,7 @@ function handleMainMenuSelection(selection) {
     currentQuestionIndex = 0;
     setTimeout(measurementHandlerFunction, 5000);
   }
-  else if (selection.includes("ár")) {
+  else if (selection.toLowerCase().includes("ár")) {
     currentQuestions = offerQuestions;
     currentQuestionIndex = 0;
     askNextQuestion();

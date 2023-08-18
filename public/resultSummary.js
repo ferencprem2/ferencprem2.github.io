@@ -10,20 +10,19 @@ export function showSummary(DataArray, questionArray) {
 
     let summaryText = '';
     for (let i = 0; i < DataArray.length; i++) {
-        console.log(DataArray[i])
-        for (let j = 0; j > questionArray; j++) {
-            const currentData = DataArray[i];
-            summaryText += `<p>${questionArray[j]}: ${currentData}</p>`
-        }
+        console.log(questionArray[i])
+        const currentData = DataArray[i];
+        summaryText += `<div class="summary-container"> <p>${i + 1}. adat: ${questionArray[i]}: ${currentData}</p> <button id="sendButton">Változtatás</button> </div>`
+
     }
 
     resultDiv.style.visibility = 'visible'
     resultSummary.innerHTML = summaryText;
 
     doneButton.addEventListener('click', () => {
+        //TODO: Confirmation for the datas, yes or no
         resultDiv.style.visibility = 'hidden'
-        alert('Adatok elküldve')
     })
-    
+
 
 }
