@@ -8,6 +8,7 @@ const chatbox = document.querySelector('.chatbox');
 const helpText = document.getElementById('help-text');
 let numberOfTarps;
 export let offerDatasArray = [];
+export let measurementDatasArray = [];
 
 
 
@@ -32,11 +33,23 @@ chatbotIcon.addEventListener('click', function() {
   }
 });
 
+function validateName(dataArray){
+  dataArray.push(userMessage)
+  if (!isNaN(numberMessage) || userMessage === "") {
+      addMessage('Kérem nevet adjon meg', true);
+      return;
+  }
+}
+
+
+
+
+
 const menuQuestions = [
   "Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon \n a következő lehetőségek közül: \n ingyenes felmérés igénylése(írja: ingy) \n árajánlat kérése meglévő méretek alapján(írja: ár) \n érdeklődés(írja: érd) \n aktuális akcióinkról történő tájékozódás(írja: akc) \n ügyfélszolgálat(írja: ügy)"
 ]
 
-const freeMeasurementQuestions = [
+export const freeMeasurementQuestions = [
   'Adja meg a teljes nevét:',
   'Adja meg a megye nevét:',
   'Adja meg az irányítószámát:',
@@ -53,6 +66,20 @@ const freeMeasurementQuestions = [
 export const offerQuestions = [
   'Adja meg a nevét: ',
   'Adja meg hány darab ponyvát szeretne: '
+]
+
+export const interestQuestions = [
+  'Kérem írja le pontosan mit szeretne',
+  'Adja meg a teljes nevét:',
+  'Adja meg a megye nevét:',
+  'Adja meg az irányítószámát:',
+  'Adja meg települése nevét:',
+  'Adja meg utcája nevét:',
+  'Ajda meg a házszámát:',
+  'Adja meg email címét:',
+  'Adja meg telefonszámát:',
+  'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
+  'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
 ]
 
 const offerSideMenuQuestions = [
@@ -118,6 +145,18 @@ function handleUserInput() {
     return;  // Return early to prevent further processing
   }
 
+  if (currentQuestions == freeMeasurementQuestions) {
+    //First question (Name):
+    if (currentQuestionIndex == 0) {
+      validateName(measurementDatasArray)
+    }
+  }
+
+  
+
+
+
+
   if (currentQuestions === offerQuestions) {
     console.log(userMessage);
     console.log(currentQuestionIndex);
@@ -125,12 +164,7 @@ function handleUserInput() {
 
     // First question (Name):
     if (currentQuestionIndex == 1) {
-      const numberMessage = Number(userMessage);
-      offerDatasArray.push(userMessage)
-      if (!isNaN(numberMessage) || userMessage === "") {
-          addMessage('Kérem nevet adjon meg', true);
-          return;
-      }
+        validateName(offerDatasArray)
       // TODO felesleges kihozni változóba, mert egyelőre nem használod sehol.
     }
 
@@ -229,7 +263,7 @@ let currentQuestions;
 let currentQuestionIndex = 0;
 
 function handleMainMenuSelection(selection) {
-  if (selection.includes("ingy")) {
+  if (selection.toLowerCase().includes("ingy")) {
     addMessageWithAnimation('Ingyenes felmérés igénylésének a menete...', true); // the message has been shortened for brevity
     currentQuestions = freeMeasurementQuestions;
     currentQuestionIndex = 0;
@@ -237,6 +271,11 @@ function handleMainMenuSelection(selection) {
   }
   else if (selection.toLowerCase().includes("ár")) {
     currentQuestions = offerQuestions;
+    currentQuestionIndex = 0;
+    askNextQuestion();
+  }
+  else if (selection.toLowerCase().includes("érd")){
+    currentQuestions = interestQuestions;
     currentQuestionIndex = 0;
     askNextQuestion();
   }
