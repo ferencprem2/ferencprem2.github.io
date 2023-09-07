@@ -11,7 +11,6 @@ export let offerDatasArray = [];
 export let measurementDatasArray = [];
 
 
-
 //Send button and send with enter key
 sendBtn.addEventListener('click', handleUserInput);
 userInput.addEventListener('keydown', function (e) {
@@ -33,20 +32,8 @@ chatbotIcon.addEventListener('click', function() {
   }
 });
 
-function validateName(dataArray){
-  dataArray.push(userMessage)
-  if (!isNaN(numberMessage) || userMessage === "") {
-      addMessage('Kérem nevet adjon meg', true);
-      return;
-  }
-}
-
-
-
-
-
 const menuQuestions = [
-  "Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon \n a következő lehetőségek közül: \n ingyenes felmérés igénylése(írja: ingy) \n árajánlat kérése meglévő méretek alapján(írja: ár) \n érdeklődés(írja: érd) \n aktuális akcióinkról történő tájékozódás(írja: akc) \n ügyfélszolgálat(írja: ügy)"
+  `Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon a következő lehetőségek közül: <br> Ingyenes felmérés igénylése <button id="freeMeasurementButton">Választ</button> <br> Árajánlat kérése meglévő méretek alapján <button id="offersButton">Választ</button> <br> Érdeklődés <button id="interestButton">Választ</button> <br> Aktuális akcióinkról történő tájékozódás <button id="saleButton">Választ</button> <br> Ügyfélszolgálat <button id="supportButton">Választ</button>`
 ]
 
 export const freeMeasurementQuestions = [
@@ -91,43 +78,24 @@ export function addMessage(message, isBot) {
   const chatContent = document.getElementById('chat-content');
   const messageDiv = document.createElement('div');
   messageDiv.classList.add('message');
+  messageDiv.classList.add(isBot ? 'bot-message' : 'user-message')
 
-  if (isBot) {
-      messageDiv.classList.add('bot-message');
-  } else {
-      messageDiv.classList.add('user-message');
-  }
-
-  messageDiv.innerText = message;
+  messageDiv.innerHTML = message;
   chatContent.appendChild(messageDiv);
+
+  const freeMesBtn = document.getElementById('freeMeasurementButton')
+  const offerBtn = document.getElementById('offersButton');
+  const interestBtn = document.getElementById('interestButton');  
+  const saleBtn = document.getElementById('saleButton');
+  const supportBtn = document.getElementById('supportButton');
+
+  freeMesBtn.addEventListener("click", () => {
+    console.log(1)
+  })  
+
 
   // Scroll to the bottom
   chatContent.scrollTop = chatContent.scrollHeight;
-}
-
-//Displays the bot response with animation
-function addMessageWithAnimation(message, isBot) {
-  const messageContainer = document.createElement('div');
-  messageContainer.classList.add(isBot ? 'bot-message' : 'user-message');
-
-  const typingAnimation = document.createElement('span');
-  typingAnimation.classList.add('typing-animation');
-  messageContainer.appendChild(typingAnimation);
-
-  chatContent.appendChild(messageContainer);
-
-  let charIndex = 0;
-  const typingInterval = setInterval(() => {
-    if (charIndex < message.length) {
-      const currentChar = message.charAt(charIndex);
-      typingAnimation.innerHTML += (currentChar === ' ') ? '&nbsp;' : currentChar;
-      charIndex++;
-    } else {
-      clearInterval(typingInterval);
-      // Move the scroll to the bottom AFTER the animation completes.
-      chatContent.scrollTop = chatContent.scrollHeight;
-    }
-  }, 10);
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
@@ -148,14 +116,9 @@ function handleUserInput() {
   if (currentQuestions == freeMeasurementQuestions) {
     //First question (Name):
     if (currentQuestionIndex == 0) {
-      validateName(measurementDatasArray)
+      // validateName(measurementDatasArray)
     }
   }
-
-  
-
-
-
 
   if (currentQuestions === offerQuestions) {
     console.log(userMessage);
@@ -164,7 +127,7 @@ function handleUserInput() {
 
     // First question (Name):
     if (currentQuestionIndex == 1) {
-        validateName(offerDatasArray)
+        // validateName(offerDatasArray)
       // TODO felesleges kihozni változóba, mert egyelőre nem használod sehol.
     }
 
@@ -248,7 +211,7 @@ function handleUserInput() {
   }
 
   if (currentQuestions === menuQuestions) {
-    handleMainMenuSelection(userMessage);
+    handleMainMenuSelection();
     return;
   }
 
@@ -258,30 +221,34 @@ function handleUserInput() {
   }
 }
 
-
 let currentQuestions;
 let currentQuestionIndex = 0;
 
-function handleMainMenuSelection(selection) {
-  if (selection.toLowerCase().includes("ingy")) {
-    addMessageWithAnimation('Ingyenes felmérés igénylésének a menete...', true); // the message has been shortened for brevity
-    currentQuestions = freeMeasurementQuestions;
-    currentQuestionIndex = 0;
-    setTimeout(measurementHandlerFunction, 5000);
+
+function handleMainMenuSelection(buttonId) {
+  switch (buttonId) {
+    case 0:
+      addMessage("Ingyenes felmérés igénylésének a menet...", true)
+      currentQuestions = freeMeasurementQuestions;
+      currentQuestionIndex = 0;
+      setTimeout(measurementHandlerFunction, 5000);   
+      break;
+    case 1: 
+      currentQuestions = offerQuestions;
+      currentQuestionIndex = 0;
+      askNextQuestion();
+      break;
+    case 2:
+      currentQuestions = interestQuestions;
+      currentQuestionIndex = 0;
+      askNextQuestion();
+      break;
+    case 3: 
+      break;
+    case 4:
+      break;
   }
-  else if (selection.toLowerCase().includes("ár")) {
-    currentQuestions = offerQuestions;
-    currentQuestionIndex = 0;
-    askNextQuestion();
-  }
-  else if (selection.toLowerCase().includes("érd")){
-    currentQuestions = interestQuestions;
-    currentQuestionIndex = 0;
-    askNextQuestion();
-  }
-  else {
-    addMessage('Kérem a meglévő opciók közül válasszon', true);
-  }
+
 }
 
 function measurementHandlerFunction() {
@@ -290,24 +257,19 @@ function measurementHandlerFunction() {
   askNextQuestion();
 }
 
-
 //function that goes to the next question
 function askNextQuestion() {
   if (currentQuestionIndex < currentQuestions.length) {
-      addMessageWithAnimation(currentQuestions[currentQuestionIndex], true);
+      addMessage(currentQuestions[currentQuestionIndex], true)
+      // addMessageWithAnimation(currentQuestions[currentQuestionIndex], true);
       currentQuestionIndex++;
   } else {
-      // Optionally, you can add a message indicating the end of the questions.
-      //TODO: BUG
-      addMessageWithAnimation('Kérdések vége. Köszönjük!', true);
       switch(currentQuestions){
         case offerQuestions:
           showSummary(offerDatasArray, offerQuestions)
       }
   }
 }
-
-
 
 //Assign the menu questions at the start
 currentQuestions = menuQuestions;

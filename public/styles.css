@@ -153,7 +153,8 @@ body {
 }
 
 .chatbox {
-  width: 450px;
+  width: 500px;
+  line-height: 1.5;
   max-height: 400px;
   overflow-y: auto;
   background-color: white;
@@ -276,4 +277,7 @@ body {
 
 .summary-button {
   vertical-align: middle; /* To align the button vertically with the text */
+}
+#freeMeasurementButton, #offersButton, #interestButton, #saleButton, #supportButton{
+float: right;
 }
