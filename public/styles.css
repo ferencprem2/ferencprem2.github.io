@@ -1,0 +1,283 @@
+body {
+  font-family: 'Arial', sans-serif;
+  position: relative;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #a60303;
+  color: white;
+}
+
+.bot-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.chatbot-header-icon {
+  width: 80px;
+  /* Adjust based on your preference */
+  height: 40px;
+  background-image: url('PonyvaexpresszLogo.PNG');
+  background-size: cover;
+}
+
+.chatbox-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+}
+
+.chat-icon {
+  position: relative;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.chat-icon i {
+  font-size: 2rem;
+  color: #a60303;
+}
+
+.chat-prompt {
+  position: absolute;
+  right: 80px;
+  bottom: 5px;
+  background-color: #a60303;
+  color: #FFF;
+  padding: 5px 10px;
+  border-radius: 10px;
+  animation: bounce 1s infinite;
+}
+
+.chat-content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  flex: 1;
+}
+
+#chat-content {
+  max-height: 300px;
+  /* Adjust based on your preference */
+  overflow-y: auto;
+  /* change to auto from scroll */
+
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  /* For Firefox */
+  -ms-overflow-style: none;
+  /* For IE & Edge */
+
+  /* For Chrome, Safari */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Chat messages */
+.message {
+  max-width: 80%;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.bot-message {
+  background-color: #e5e5e5;
+  /* Light gray for bot messages */
+  align-self: flex-start;
+  /* Align left */
+  border-top-left-radius: 0;
+  padding: 10px;
+  /* Make it look like a bubble */
+}
+
+.user-message {
+  background-color: #a60303;
+  /* Dark blue for user messages */
+  color: white;
+  align-self: flex-end;
+  /* Align right */
+  border-top-right-radius: 0;
+  /* Make it look like a bubble */
+}
+
+
+
+#chatbot-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  width: 101px;
+  height: 51px;
+  cursor: pointer;
+  background-image: url('PonyvaexpresszLogo.PNG');
+  /* Replace with your chatbot icon image */
+  background-size: cover;
+  z-index: 1000;
+}
+
+#help-text {
+  position: absolute;
+  bottom: 70px;
+  right: 10px;
+  color: #a60303;
+  animation: jump 1s infinite;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.chatbox {
+  width: 500px;
+  line-height: 1.5;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 70px;
+  right: 10px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chatbox::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #a60303;
+  color: #FFF;
+}
+
+.user-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+#user-input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+
+#send-btn {
+  background-color: #a60303;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+#send-btn:hover {
+  background-color: #a60303;
+}
+
+#close-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #FFF;
+}
+
+#results {
+  visibility: hidden;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80%;
+  width: fit-content;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#results #sendButton {
+  display: block;
+  margin: 10px auto;
+  padding: 5px 10px;
+  background-color: #a60303;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+#result h1 {
+  display: flex;
+  text-align: center;
+}
+
+#sendButton:hover {
+  background-color: #fff;
+}
+
+.summary-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.summary-container p {
+  flex: 1;          /* This will make the paragraph take up any available space */
+  text-align: center;
+}
+
+.summary-container button {
+  margin-left: 20px;  /* Optional: Add some space between the paragraph and the button */
+}
+
+.summary-text {
+  margin-right: 20px; /* This adds space to the right side of the <p> */
+  display: inline-block; /* To allow the <p> to be inline with the button */
+}
+
+.summary-button {
+  vertical-align: middle; /* To align the button vertically with the text */
+}
+#freeMeasurementButton, #offersButton, #interestButton, #saleButton, #supportButton{
+float: right;
+}
