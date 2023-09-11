@@ -106,6 +106,7 @@ export function addMessage(message, isBot) {
   })
 
 
+
   // Scroll to the bottom
   chatContent.scrollTop = chatContent.scrollHeight;
 }
