@@ -9,6 +9,7 @@ const helpText = document.getElementById('help-text');
 let numberOfTarps;
 export let offerDatasArray = [];
 export let measurementDatasArray = [];
+export let interestDataArray = [];
 
 
 //Send button and send with enter key
@@ -128,6 +129,7 @@ function handleUserInput() {
 
   if (currentQuestions == freeMeasurementQuestions) {
     //First question (Name):
+    measurementDatasArray.push(userMessage)
     if (currentQuestionIndex == 0) {
       // validateName(measurementDatasArray)
     }
@@ -278,8 +280,15 @@ function askNextQuestion() {
       currentQuestionIndex++;
   } else {
       switch(currentQuestions){
+        case freeMeasurementQuestions:
+          showSummary(measurementDatasArray, freeMeasurementQuestions)
+          break;
         case offerQuestions:
           showSummary(offerDatasArray, offerQuestions)
+          break;
+        case interestQuestions:
+          showSummary(interestDataArray, interestQuestions)
+          break;
       }
   }
 }
