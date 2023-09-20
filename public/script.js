@@ -48,7 +48,6 @@ export const freeMeasurementQuestions = [
   'Adja meg telefonszámát:',
   'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
   'Adja meg a ponyva típusát(terasz ponyva, filagória ponyva, kocsi beálló, egyéb):',
-  'Amennyiben vissza szeretne lépni a főmenübe, írja: (vissza):'
 ];
 
 export const offerQuestions = [
@@ -117,7 +116,11 @@ function handleUserInput() {
   const userMessage = userInput.value.trim();
   addMessage(userMessage, false);  // We should specify that this is a user message
   
-  if (userMessage === '') return;
+  if (userMessage === '') 
+  {
+    //TODO: BUG
+    addMessage("Kérem töltsön ki minden mezőt!", true)
+  };
   userInput.value = '';
 
   if (currentQuestions === freeMeasurementQuestions && userMessage.toLowerCase() === "vissza") {
@@ -281,12 +284,15 @@ function askNextQuestion() {
   } else {
       switch(currentQuestions){
         case freeMeasurementQuestions:
+          console.log(`${currentQuestions}. asd`)
           showSummary(measurementDatasArray, freeMeasurementQuestions)
           break;
         case offerQuestions:
+          console.log(`${currentQuestions}. asd`)
           showSummary(offerDatasArray, offerQuestions)
           break;
         case interestQuestions:
+          console.log(`${currentQuestions}. asd`)
           showSummary(interestDataArray, interestQuestions)
           break;
       }
