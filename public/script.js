@@ -1,5 +1,6 @@
 import { OfferHandler } from "./offerHandler.js";
 import { showSummary } from "./resultSummary.js";
+import { MeasurementHandler } from "./measurementHandler.js";
 
 const chatContent = document.getElementById('chat-content');
 const userInput = document.getElementById('user-input');
@@ -11,6 +12,8 @@ const helpText = document.getElementById('help-text');
 export let measurementDatasArray = [];
 export let offerDatasArray = [];
 export let interestDataArray = [];
+export let currentQuestions;
+export let currentQuestionIndex = 0;
 
 
 //Send button and send with enter key
@@ -34,7 +37,7 @@ chatbotIcon.addEventListener('click', function() {
   }
 });
 
-const menuQuestions = [
+export const menuQuestions = [
   `Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon a következő lehetőségek közül: <br> Ingyenes felmérés igénylése <button id="freeMeasurementButton">Választ</button> <br> Árajánlat kérése meglévő méretek alapján <button id="offersButton">Választ</button> <br> Érdeklődés <button id="interestButton">Választ</button> <br> Aktuális akcióinkról történő tájékozódás <button id="saleButton">Választ</button> <br> Ügyfélszolgálat <button id="supportButton">Választ</button>`
 ]
 
@@ -128,9 +131,6 @@ export function addMessage(message, isBot) {
   supportBtn.addEventListener("click", () => {
     handleMainMenuSelection(4)
   })
-
-
-
   // Scroll to the bottom
   chatContent.scrollTop = chatContent.scrollHeight;
 }
@@ -140,27 +140,20 @@ function handleUserInput() {
   const userMessage = userInput.value.trim();
   addMessage(userMessage, false);  // We should specify that this is a user message
   
-  if (userMessage === '') 
-  {
-    //TODO: BUG
-    addMessage("Kérem töltsön ki minden mezőt!", true)
-  };
+  if (userMessage === '') return;
+  // {
+  //   //TODO: BUG
+  //   addMessage("Kérem töltsön ki minden mezőt!", true)
+  // };
   userInput.value = '';
 
   switch(currentQuestions) {
     case freeMeasurementQuestions:
+      mea
       break;
     case offerQuestions:
-      OfferHandler(userMessage, currentQuestions, currentQuestionIndex, offerQuestions, offerDatasArray, menuQuestions)
+      OfferHandler(userMessage)
       break;
-  }
-
-
-  if (currentQuestions === freeMeasurementQuestions && userMessage.toLowerCase() === "vissza") {
-    currentQuestions = menuQuestions;
-    currentQuestionIndex = 0;
-    askNextQuestion();
-    return;  // Return early to prevent further processing
   }
 
   if (currentQuestions == freeMeasurementQuestions) {
@@ -175,15 +168,9 @@ function handleUserInput() {
     handleMainMenuSelection();
     return;
   }
-
-  if (currentQuestionIndex === currentQuestions.length) {
-  } else {
-    askNextQuestion();
-  }
 }
 
-let currentQuestions;
-let currentQuestionIndex = 0;
+
 
 
 function handleMainMenuSelection(buttonId) {
@@ -222,7 +209,6 @@ function measurementHandlerFunction() {
 export function askNextQuestion() {
   if (currentQuestionIndex < currentQuestions.length) {
       addMessage(currentQuestions[currentQuestionIndex], true)
-      // addMessageWithAnimation(currentQuestions[currentQuestionIndex], true);
       currentQuestionIndex++;
   } else {
       switch(currentQuestions){
