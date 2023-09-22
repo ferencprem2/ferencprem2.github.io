@@ -1,3 +1,4 @@
+import { OfferHandler } from "./offerHandler.js";
 import { showSummary } from "./resultSummary.js";
 
 const chatContent = document.getElementById('chat-content');
@@ -6,9 +7,9 @@ const sendBtn = document.getElementById('send-btn');
 const chatbotIcon = document.getElementById('chatbot-icon');
 const chatbox = document.querySelector('.chatbox');
 const helpText = document.getElementById('help-text');
-let numberOfTarps;
-export let offerDatasArray = [];
+// export let numberOfTarps;
 export let measurementDatasArray = [];
+export let offerDatasArray = [];
 export let interestDataArray = [];
 
 
@@ -35,6 +36,29 @@ chatbotIcon.addEventListener('click', function() {
 
 const menuQuestions = [
   `Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon a következő lehetőségek közül: <br> Ingyenes felmérés igénylése <button id="freeMeasurementButton">Választ</button> <br> Árajánlat kérése meglévő méretek alapján <button id="offersButton">Választ</button> <br> Érdeklődés <button id="interestButton">Választ</button> <br> Aktuális akcióinkról történő tájékozódás <button id="saleButton">Választ</button> <br> Ügyfélszolgálat <button id="supportButton">Választ</button>`
+]
+
+const hungarianCountys = [
+  "Pest vármegye",
+  "Baranya vármegye",                 
+  "Bács-Kiskun vármegye",             
+  "Békés vármegye",                   
+  "Borsod-Abaúj-Zemplén vármegye",    
+  "Csongrád vármegye",                
+  "Fejér vármegye",                   
+  "Győr-Moson-Sopron vármegye",       
+  "Hajdú-Bihar vármegye",             
+  "Heves vármegye",                   
+  "Jász-Nagykun-Szolnok vármegye",    
+  "Komárom-Esztergom vármegye",      
+  "Nógrád vármegye",                  
+  "Pest vármegye",                    
+  "Somogy vármegye",                  
+  "Szabolcs-Szatmár-Bereg vármegye",  
+  "Tolna vármegye",                   
+  "Vas vármegye",
+  "Veszprém vármegye",
+  "Zala vármegye"
 ]
 
 export const freeMeasurementQuestions = [
@@ -123,6 +147,15 @@ function handleUserInput() {
   };
   userInput.value = '';
 
+  switch(currentQuestions) {
+    case freeMeasurementQuestions:
+      break;
+    case offerQuestions:
+      OfferHandler(userMessage, currentQuestions, currentQuestionIndex, offerQuestions, offerDatasArray, menuQuestions)
+      break;
+  }
+
+
   if (currentQuestions === freeMeasurementQuestions && userMessage.toLowerCase() === "vissza") {
     currentQuestions = menuQuestions;
     currentQuestionIndex = 0;
@@ -136,96 +169,6 @@ function handleUserInput() {
     if (currentQuestionIndex == 0) {
       // validateName(measurementDatasArray)
     }
-  }
-
-  if (currentQuestions === offerQuestions) {
-    console.log(userMessage);
-    console.log(currentQuestionIndex);
-
-
-    // First question (Name):
-    if (currentQuestionIndex == 1) {
-        // validateName(offerDatasArray)
-      // TODO felesleges kihozni változóba, mert egyelőre nem használod sehol.
-    }
-
-    // Second question (Number of tarps):
-    if (currentQuestionIndex == 2) {
-      numberOfTarps = parseInt(userMessage);
-      offerDatasArray.push(numberOfTarps)
-      if (isNaN(numberOfTarps) || numberOfTarps <= 0) {
-          addMessage('Kérem valós ponyvaszámot adjon meg!', true);
-          return;
-      }
-
-        for (let i = 1; i <= numberOfTarps; i++) {
-            offerQuestions.push(`Adja meg a ${i}. ponyva szélességét centiméterben:`);
-            offerQuestions.push(`Adja meg a ${i}. ponyva magasságát centiméterben:`);
-            offerQuestions.push(`Szeretne-e ajtó a(z) ${i}. ponyvába? (igen/nem):`);
-            offerQuestions.push(`Adja meg a ${i}. színét:`);
-        }
-        askNextQuestion();
-        return;
-    }
-
-    if(currentQuestionIndex > numberOfTarps * 4 + 2) {
-      const lowerCaseMessage = userMessage.toLowerCase();
-      if (lowerCaseMessage === 'igen') {
-          currentQuestions = menuQuestions;
-          currentQuestionIndex = 0;
-          askNextQuestion();
-          return;
-        } 
-        
-      addMessage(lowerCaseMessage === 'nem' ? 'Köszönjük válaszait' : 'Kérem igennel vagy nemmel válaszoljon', true);
-      return;
-    }
-
-    // Width:
-    if (currentQuestionIndex >= 3 && (currentQuestionIndex - 3) % 4 === 0) {
-      if (isNaN(Number(userMessage))) {
-          addMessage('Kérem valós számot adjon meg a szélességhez!', true);
-          return;
-      } else {
-        offerDatasArray.push(userMessage)
-      }
-    }
-
-    // Height:
-    if (currentQuestionIndex >= 4 && (currentQuestionIndex - 4) % 4 === 0) {
-      if (isNaN(Number(userMessage))) {
-        addMessage('Kérem valós számot adjon meg a magassághoz!', true);
-        return;
-      } else {
-        offerDatasArray.push(userMessage)
-      }
-    }
-
-    // Door:
-    if (currentQuestionIndex >= 5 && (currentQuestionIndex - 5) % 4 === 0) {
-      const lowerCaseMessage = userMessage.toLowerCase();
-      if ((lowerCaseMessage != 'igen') && (lowerCaseMessage != 'nem')) {
-        addMessage('Kérem igennel vagy nemmel válaszoljon', true);
-        return;
-      } else {
-        offerDatasArray.push(lowerCaseMessage)
-      }
-    }
-
-    // Color:
-    if (currentQuestionIndex >= 6 && (currentQuestionIndex - 6) % 4 === 0) {
-      const numberMessage = Number(userMessage);
-      if (!isNaN(numberMessage) || userMessage === "") {
-        addMessage('Kérem színt adjon meg', true);
-        return;
-      } else {
-        offerDatasArray.push(userMessage)
-      }
-    }
-
-    // Check for return to main menu:
-    askNextQuestion();
-    return;
   }
 
   if (currentQuestions === menuQuestions) {
@@ -276,7 +219,7 @@ function measurementHandlerFunction() {
 }
 
 //function that goes to the next question
-function askNextQuestion() {
+export function askNextQuestion() {
   if (currentQuestionIndex < currentQuestions.length) {
       addMessage(currentQuestions[currentQuestionIndex], true)
       // addMessageWithAnimation(currentQuestions[currentQuestionIndex], true);
