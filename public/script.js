@@ -41,7 +41,7 @@ export const menuQuestions = [
   `Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon a következő lehetőségek közül: <br> Ingyenes felmérés igénylése <button id="freeMeasurementButton">Választ</button> <br> Árajánlat kérése meglévő méretek alapján <button id="offersButton">Választ</button> <br> Érdeklődés <button id="interestButton">Választ</button> <br> Aktuális akcióinkról történő tájékozódás <button id="saleButton">Választ</button> <br> Ügyfélszolgálat <button id="supportButton">Választ</button>`
 ]
 
-const hungarianCountys = [
+export const hungarianCounties = [
   "Pest vármegye",
   "Baranya vármegye",                 
   "Bács-Kiskun vármegye",             
@@ -102,6 +102,10 @@ const offerSideMenuQuestions = [
 
 //Decides whether the question is bot response or user response and puts the output into the corresponting container
 export function addMessage(message, isBot) {
+  if (currentQuestions != menuQuestions && message.length == 0) {
+    message = "Kérem töltse ki a mezőt!";
+    isBot = true;
+  }
   const chatContent = document.getElementById('chat-content');
   const messageDiv = document.createElement('div');
   messageDiv.classList.add('message');
@@ -115,7 +119,7 @@ export function addMessage(message, isBot) {
   const interestBtn = document.getElementById('interestButton');  
   const saleBtn = document.getElementById('saleButton');
   const supportBtn = document.getElementById('supportButton');
-
+  
   freeMesBtn.addEventListener("click", () => {
     handleMainMenuSelection(0)
   })
@@ -133,6 +137,7 @@ export function addMessage(message, isBot) {
   })
   // Scroll to the bottom
   chatContent.scrollTop = chatContent.scrollHeight;
+
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
@@ -140,7 +145,7 @@ function handleUserInput() {
   const userMessage = userInput.value.trim();
   addMessage(userMessage, false);  // We should specify that this is a user message
   
-  if (userMessage === '') return;
+  if (userMessage.length === 0) return;
   // {
   //   //TODO: BUG
   //   addMessage("Kérem töltsön ki minden mezőt!", true)
@@ -149,19 +154,11 @@ function handleUserInput() {
 
   switch(currentQuestions) {
     case freeMeasurementQuestions:
-      mea
+      MeasurementHandler(userMessage)
       break;
     case offerQuestions:
       OfferHandler(userMessage)
       break;
-  }
-
-  if (currentQuestions == freeMeasurementQuestions) {
-    //First question (Name):
-    measurementDatasArray.push(userMessage)
-    if (currentQuestionIndex == 0) {
-      // validateName(measurementDatasArray)
-    }
   }
 
   if (currentQuestions === menuQuestions) {
@@ -176,10 +173,9 @@ function handleUserInput() {
 function handleMainMenuSelection(buttonId) {
   switch (buttonId) {
     case 0:
-      addMessage("Ingyenes felmérés igénylésének a menet...", true)
       currentQuestions = freeMeasurementQuestions;
       currentQuestionIndex = 0;
-      setTimeout(measurementHandlerFunction, 5000);   
+      askNextQuestion();
       break;
     case 1: 
       currentQuestions = offerQuestions;
@@ -199,33 +195,28 @@ function handleMainMenuSelection(buttonId) {
 
 }
 
-function measurementHandlerFunction() {
-  currentQuestionIndex = 0;
-  currentQuestions = freeMeasurementQuestions;
-  askNextQuestion();
-}
-
 //function that goes to the next question
 export function askNextQuestion() {
   if (currentQuestionIndex < currentQuestions.length) {
       addMessage(currentQuestions[currentQuestionIndex], true)
       currentQuestionIndex++;
-  } else {
-      switch(currentQuestions){
-        case freeMeasurementQuestions:
-          console.log(`${currentQuestions}. asd`)
-          showSummary(measurementDatasArray, freeMeasurementQuestions)
-          break;
-        case offerQuestions:
-          console.log(`${currentQuestions}. asd`)
-          showSummary(offerDatasArray, offerQuestions)
-          break;
-        case interestQuestions:
-          console.log(`${currentQuestions}. asd`)
-          showSummary(interestDataArray, interestQuestions)
-          break;
-      }
-  }
+      return;
+      
+    }
+  switch(currentQuestions){
+    case freeMeasurementQuestions:
+      console.log(`${currentQuestions}. asd`)
+      showSummary(measurementDatasArray, freeMeasurementQuestions)
+      break;
+    case offerQuestions:
+      console.log(`${currentQuestions}. asd`)
+      showSummary(offerDatasArray, offerQuestions)
+      break;
+    case interestQuestions:
+      console.log(`${currentQuestions}. asd`)
+      showSummary(interestDataArray, interestQuestions)
+      break;
+    }
 }
 
 //Assign the menu questions at the start

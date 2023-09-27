@@ -2,16 +2,15 @@ import { askNextQuestion, addMessage, offerQuestions, offerDatasArray, menuQuest
 
 let numberOfTarps;
 
-export const OfferHandler = () => {
+export const OfferHandler = (userMessage) => {
   if (currentQuestions === offerQuestions) {
     console.log(userMessage);
     console.log(currentQuestionIndex);
 
 
     // First question (Name):
-    if (currentQuestionIndex == 1) {
-        // validateName(offerDatasArray)
-      // TODO felesleges kihozni változóba, mert egyelőre nem használod sehol.
+    if (currentQuestionIndex == 1 && userMessage.length != 0) {
+        offerDatasArray.push(userMessage)
     }
 
     // Second question (Number of tarps):
