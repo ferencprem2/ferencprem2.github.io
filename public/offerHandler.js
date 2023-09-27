@@ -1,5 +1,6 @@
 import { askNextQuestion, addMessage, offerQuestions, offerDatasArray, menuQuestions, currentQuestionIndex, currentQuestions } from "./script.js";
 
+
 let numberOfTarps;
 
 export const OfferHandler = (userMessage) => {

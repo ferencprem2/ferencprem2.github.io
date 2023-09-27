@@ -235,7 +235,7 @@ body {
   justify-content: center;
 }
 
-#results #sendButton {
+#results #sendButton, #editButton {
   display: block;
   margin: 10px auto;
   padding: 5px 10px;
@@ -248,10 +248,6 @@ body {
 #result h1 {
   display: flex;
   text-align: center;
-}
-
-#sendButton:hover {
-  background-color: #fff;
 }
 
 .summary-container {

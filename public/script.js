@@ -168,8 +168,6 @@ function handleUserInput() {
 }
 
 
-
-
 function handleMainMenuSelection(buttonId) {
   switch (buttonId) {
     case 0:
@@ -201,7 +199,6 @@ export function askNextQuestion() {
       addMessage(currentQuestions[currentQuestionIndex], true)
       currentQuestionIndex++;
       return;
-      
     }
   switch(currentQuestions){
     case freeMeasurementQuestions:
