@@ -74,7 +74,7 @@ export const freeMeasurementQuestions = [
   'Adja meg email címét:',
   'Adja meg telefonszámát:',
   'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-  'Adja meg a ponyva típusát(terasz ponyva, filagória ponyva, kocsi beálló, egyéb):',
+  'Válassza ki a ponyva típusát: <select><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select> ',
 ];
 
 export const offerQuestions = [

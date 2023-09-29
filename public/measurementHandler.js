@@ -27,6 +27,12 @@ const validateDate = (inputDate) => {
     return date > today;
 }
 
+// const getOptionValue = () => {
+//     const options = Array.from(document.querySelectorAll(".chat-conetnt input option"));
+//     var optionValue = []
+
+// }
+
 const tarps = ["terasz ponyva", "filagória ponyva", "kocsi beálló", "egyéb"]
 
 
@@ -74,7 +80,7 @@ export const MeasurementHandler = (userMessage) => {
             case 10:
                 //Tarp Type
                 //TODO: Add a type picker so it works with leeser misunderstanding
-                currentQuestionIndex == 10 && tarps.includes(userMessage) ? (measurementDatasArray.push(userMessage), askNextQuestion()) : addMessage("Kérem a megadott ponyvákból válasszon!", true)
+                currentQuestionIndex == 10 ? (measurementDatasArray.push(Array.from(document.querySelectorAll(".chat-conetnt input option")).forEach(optionValue => measurementDatasArray.push(optionValue.value))), askNextQuestion()) : addMessage("Kérem a megadott ponyvákból válasszon!", true)
                 break;
 
         }
