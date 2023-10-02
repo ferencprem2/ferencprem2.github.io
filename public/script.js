@@ -1,8 +1,8 @@
 import { OfferHandler } from "./offerHandler.js";
 import { showSummary } from "./resultSummary.js";
-import { MeasurementHandler } from "./measurementHandler.js";
+import { MeasurementHandler} from "./measurementHandler.js";
 
-const chatContent = document.getElementById('chat-content');
+export const chatContent = document.getElementById('chat-content');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const chatbotIcon = document.getElementById('chatbot-icon');
@@ -14,7 +14,6 @@ export let offerDatasArray = [];
 export let interestDataArray = [];
 export let currentQuestions;
 export let currentQuestionIndex = 0;
-
 
 //Send button and send with enter key
 sendBtn.addEventListener('click', handleUserInput);
@@ -64,6 +63,18 @@ export const hungarianCounties = [
   "Zala vármegye"
 ]
 
+// export const freeMeasurementQuestions = [
+//   {type: 'text', label: 'Adja meg a teljes nevét:'},
+//   {type: 'text', label: 'Adja meg a megye nevét:'},
+//   {type: 'text', label: 'Adja meg az irányítószámát:'},
+//   {type: 'text', label: 'Adja meg települése nevét:'},
+//   {type: 'text', label: 'Adja meg utcája nevét:'},
+//   {type: 'text', label: 'Ajda meg a házszámát:'},
+//   {type: 'text', label: 'Adja meg email címét:'},
+//   {type: 'text', label: 'Adja meg telefonszámát:'},
+//   {type: 'text', label: 'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):'},
+//   {type: 'dropdown', label: 'Kérem válasszon egy ponyvatípust!', options: ['terasz ponyva', 'filagória ponyva', 'kocsi beálló', 'egyéb']},
+// ];
 export const freeMeasurementQuestions = [
   'Adja meg a teljes nevét:',
   'Adja meg a megye nevét:',
@@ -74,7 +85,7 @@ export const freeMeasurementQuestions = [
   'Adja meg email címét:',
   'Adja meg telefonszámát:',
   'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-  'Válassza ki a ponyva típusát: <select><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select> ',
+  'Válassza ki a ponyva típusát: <select id="tarpTypes"><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select> ',
 ];
 
 export const offerQuestions = [
@@ -141,7 +152,7 @@ export function addMessage(message, isBot) {
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
-function handleUserInput() {
+export function handleUserInput() {
   const userMessage = userInput.value.trim();
   addMessage(userMessage, false);  // We should specify that this is a user message
   
@@ -154,6 +165,9 @@ function handleUserInput() {
 
   switch(currentQuestions) {
     case freeMeasurementQuestions:
+      if (currentQuestionIndex == 10){
+        console.log("Sziaaaa")
+      }
       MeasurementHandler(userMessage)
       break;
     case offerQuestions:
@@ -195,22 +209,35 @@ function handleMainMenuSelection(buttonId) {
 
 //function that goes to the next question
 export function askNextQuestion() {
+  // if (currentQuestions != menuQuestions && currentQuestionIndex < currentQuestions.length) {
+  //     addMessage(currentQuestions[currentQuestionIndex].label, true)
+  //     currentQuestionIndex++;
+  //     return;
+  // }
   if (currentQuestionIndex < currentQuestions.length) {
-      addMessage(currentQuestions[currentQuestionIndex], true)
-      currentQuestionIndex++;
-      return;
-    }
+    addMessage(currentQuestions[currentQuestionIndex], true)
+    currentQuestionIndex++;
+    return;
+  }
+
+  if (currentQuestions === freeMeasurementQuestions && currentQuestionIndex === 10) {
+    setTimeout(() => {
+        const tarpTypesSelect = document.getElementById("tarpTypes");
+        if (tarpTypesSelect) {
+            tarpTypesSelect.addEventListener("change", handleUserInput);
+        } else {
+            console.error("Unable to find tarpTypesSelect element");
+        }
+    }, 0);
+}
   switch(currentQuestions){
     case freeMeasurementQuestions:
-      console.log(`${currentQuestions}. asd`)
       showSummary(measurementDatasArray, freeMeasurementQuestions)
       break;
     case offerQuestions:
-      console.log(`${currentQuestions}. asd`)
       showSummary(offerDatasArray, offerQuestions)
       break;
     case interestQuestions:
-      console.log(`${currentQuestions}. asd`)
       showSummary(interestDataArray, interestQuestions)
       break;
     }
