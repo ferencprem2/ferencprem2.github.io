@@ -12,7 +12,7 @@ export function showSummary(DataArray, questionArray) {
     let summaryText = '';
     for (let i = 0; i < DataArray.length; i++) {
         console.log(questionArray[i])
-        summaryText += `<div class="summary-container"> <p>${i + 1}. adat: ${questionArray[i]}:</p> <input type="text" value="${DataArray[i]}" readonly></input>></div>`
+        summaryText += `<div class="summary-container"> <p>${i + 1}. adat: ${questionArray[i]}:</p> <input type="text" value="${DataArray[i]}" readonly></input></div>`
     }
     resultDiv.style.visibility = 'visible';
     resultSummary.innerHTML = summaryText;
