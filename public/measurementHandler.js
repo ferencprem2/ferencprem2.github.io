@@ -1,4 +1,4 @@
-import { askNextQuestion, addMessage, freeMeasurementQuestions, measurementDatasArray, menuQuestions, currentQuestionIndex, currentQuestions, hungarianCounties, chatContent, handleUserInput } from "./script.js";
+import { askNextQuestion, addMessage, measurementDatasArray, userInput, currentQuestionIndex, currentQuestions, hungarianCounties, chatContent, handleUserInput } from "./script.js";
 
 const validateEmail = (email) => {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -68,44 +68,14 @@ export const MeasurementHandler = (userMessage) => {
             // let typeQuestion = `Kérem válasszon az alábbi ponyvatípusok közül <select id="tarpType"> <option value="terasz ponyva">terasz ponyva</option> <option value="filagória ponyva">filagória ponyva</option> <option value="kocsi beálló">kocsi beálló</option> <option value="egyéb">egyéb</option></select>`
             validateDate(userMessage) ? (measurementDatasArray.push(userMessage), askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
             break;
-        // case 10:
-        //     // Tarp Type
-        //     // TODO Szar geci hugy fos, nem tudom miért szar
-        //     tarpTypesSelect.addEventListener("change", () => {
-        //         tarp = tarpTypesSelect.value
-        //         handleUserInput();
-        //     })
-        //     // const tarps = document.getElementById('tarpTypes');
-        //     // tarps.addEventListener("change", (e) => {
-        //     //     console.log(e.target.value)
-        //     //     handleUserInput()
-        //     // })
-            
-
-
-        //     // console.log("asdasdasdasdasd")
-        //     // freeMeasurementQuestions.forEach(question => {
-        //     //     if (question.type == 'dropdown'){
-        //     //         console.log("FASz")
-        //     //         const select = document.createElement('select');
-        //     //         question.options.forEach(option => {
-        //     //             const selectedOption = document.createElement('option');
-        //     //             selectedOption.value = option;
-        //     //             selectedOption.textContent = option;
-        //     //             userMessage = option
-        //     //             select.appendChild(selectedOption)
-        //     //         })
-        //     //         select.addEventListener('change', (e) => {
-        //     //             measurementDatasArray.push(e.target.value);
-        //     //         })
-                    
-        //     //         console.log("FASFA")
-        //     //         chatContent.appendChild(select)
-        //     //         console.log("FASFA")
-        //     //     }
-        //     // })
-        //     askNextQuestion();
-        //     break;
-
+        case 10:
+            // let tarpTypes = document.getElementById("tarpTypes")
+            // tarpTypes.addEventListener("change", (e) => {
+            //     userInput.value = e.target.value
+            //     console.log(`Selected value is: ${userInput.value}`)
+            //     measurementDatasArray.push(userInput.value)
+            // })
+            askNextQuestion();
+            break;
     }
 }
