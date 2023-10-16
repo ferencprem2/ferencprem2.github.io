@@ -1,6 +1,6 @@
 import { OfferHandler } from "./offerHandler.js";
 import { showSummary } from "./resultSummary.js";
-import { MeasurementHandler} from "./measurementHandler.js";
+import { MeasurementHandler } from "./measurementHandler.js";
 
 export const chatContent = document.getElementById('chat-content');
 export const userInput = document.getElementById('user-input');
@@ -21,22 +21,22 @@ export const menuQuestions = [
 
 export const hungarianCounties = [
   "Pest vármegye",
-  "Baranya vármegye",                 
-  "Bács-Kiskun vármegye",             
-  "Békés vármegye",                   
-  "Borsod-Abaúj-Zemplén vármegye",    
-  "Csongrád vármegye",                
-  "Fejér vármegye",                   
-  "Győr-Moson-Sopron vármegye",       
-  "Hajdú-Bihar vármegye",             
-  "Heves vármegye",                   
-  "Jász-Nagykun-Szolnok vármegye",    
-  "Komárom-Esztergom vármegye",      
-  "Nógrád vármegye",                  
-  "Pest vármegye",                    
-  "Somogy vármegye",                  
-  "Szabolcs-Szatmár-Bereg vármegye",  
-  "Tolna vármegye",                   
+  "Baranya vármegye",
+  "Bács-Kiskun vármegye",
+  "Békés vármegye",
+  "Borsod-Abaúj-Zemplén vármegye",
+  "Csongrád vármegye",
+  "Fejér vármegye",
+  "Győr-Moson-Sopron vármegye",
+  "Hajdú-Bihar vármegye",
+  "Heves vármegye",
+  "Jász-Nagykun-Szolnok vármegye",
+  "Komárom-Esztergom vármegye",
+  "Nógrád vármegye",
+  "Pest vármegye",
+  "Somogy vármegye",
+  "Szabolcs-Szatmár-Bereg vármegye",
+  "Tolna vármegye",
   "Vas vármegye",
   "Veszprém vármegye",
   "Zala vármegye"
@@ -74,27 +74,26 @@ export const interestQuestions = [
   'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
 ]
 //Send button and send with enter key
-sendBtn.addEventListener('click', () => { 
-  handleUserInput()
-});
+sendBtn.addEventListener('click', handleUserInput);
 userInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-        handleUserInput();
-    }
+  if (e.key === 'Enter') {
+    handleUserInput();
+  }
 });
 
 //Clickable chatbot icon
-chatbotIcon.addEventListener('click', function() {
-  if(chatbox.style.display === 'block') {
-      chatbox.style.display = 'none';
-      document.getElementById('help-text').style.display = 'block';
+chatbotIcon.addEventListener('click', function () {
+  if (chatbox.style.display === 'block') {
+    chatbox.style.display = 'none';
+    document.getElementById('help-text').style.display = 'block';
   } else {
-      chatbox.style.display = 'block';
-      document.getElementById('help-text').style.display = 'none';
-      // You can initiate the chat sequence here if needed:
-      setTimeout(() => askNextQuestion(), 1000);
+    chatbox.style.display = 'block';
+    document.getElementById('help-text').style.display = 'none';
+    // You can initiate the chat sequence here if needed:
+    setTimeout(() => askNextQuestion(), 1000);
   }
 });
+
 
 //Decides whether the question is bot response or user response and puts the output into the corresponting container
 export function addMessage(message, isBot) {
@@ -112,10 +111,10 @@ export function addMessage(message, isBot) {
 
   const freeMesBtn = document.getElementById('freeMeasurementButton')
   const offerBtn = document.getElementById('offersButton');
-  const interestBtn = document.getElementById('interestButton');  
+  const interestBtn = document.getElementById('interestButton');
   const saleBtn = document.getElementById('saleButton');
   const supportBtn = document.getElementById('supportButton');
-  
+
   freeMesBtn.addEventListener("click", () => {
     handleMainMenuSelection(0)
   })
@@ -134,26 +133,24 @@ export function addMessage(message, isBot) {
   // Scroll to the bottom
   chatContent.scrollTop = chatContent.scrollHeight;
 
+
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
 export function handleUserInput() {
   const userMessage = userInput.value.trim();
   addMessage(userMessage, false);  // We should specify that this is a user message
-  
+
   if (userMessage.length === 0) return;
   userInput.value = '';
 
-  if (currentQuestionIndex == 10){
-    let tarpSelectButton = document.getElementById("sendTarpType")
-    let tarpTypes = document.getElementById("tarpTypes")
-    tarpSelectButton.addEventListener("click", () => {
-      console.log("TarpType")
-    })
-  }
-
-  switch(currentQuestions) {
+  switch (currentQuestions) {
     case freeMeasurementQuestions:
+      if (currentQuestionIndex == 10) {
+        const tarpTypes = document.getElementById("tarpTypes")
+        var selectedTarp = tarpTypes.value
+        MeasurementHandler(selectedTarp)
+      }
       MeasurementHandler(userMessage)
       break;
     case offerQuestions:
@@ -173,7 +170,7 @@ function handleMainMenuSelection(buttonId) {
       currentQuestionIndex = 0;
       askNextQuestion();
       break;
-    case 1: 
+    case 1:
       currentQuestions = offerQuestions;
       currentQuestionIndex = 0;
       askNextQuestion();
@@ -183,7 +180,7 @@ function handleMainMenuSelection(buttonId) {
       currentQuestionIndex = 0;
       askNextQuestion();
       break;
-    case 3: 
+    case 3:
       break;
     case 4:
       break;
@@ -197,9 +194,12 @@ export function askNextQuestion() {
     currentQuestionIndex++;
     return;
   }
+  document.getElementById("sendTarpType").addEventListener("click", () => {
+    console.log(newUserMessage)
+  })
 
 
-  switch(currentQuestions){
+  switch (currentQuestions) {
     case freeMeasurementQuestions:
       showSummary(measurementDatasArray, freeMeasurementQuestions)
       break;
@@ -209,11 +209,11 @@ export function askNextQuestion() {
     case interestQuestions:
       showSummary(interestDataArray, interestQuestions)
       break;
-    }
+  }
 }
 
 //Assign the menu questions at the start
 currentQuestions = menuQuestions;
-window.onload = function() {
+window.onload = function () {
   chatbox.style.display = 'none';
 };

@@ -65,17 +65,10 @@ export const MeasurementHandler = (userMessage) => {
         case 9:
             //TODO: Add a date picker so it works with lesser misunderstanding
             //Measurement Date
-            // let typeQuestion = `Kérem válasszon az alábbi ponyvatípusok közül <select id="tarpType"> <option value="terasz ponyva">terasz ponyva</option> <option value="filagória ponyva">filagória ponyva</option> <option value="kocsi beálló">kocsi beálló</option> <option value="egyéb">egyéb</option></select>`
             validateDate(userMessage) ? (measurementDatasArray.push(userMessage), askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
             break;
         case 10:
-            // let tarpTypes = document.getElementById("tarpTypes")
-            // tarpTypes.addEventListener("change", (e) => {
-            //     userInput.value = e.target.value
-            //     console.log(`Selected value is: ${userInput.value}`)
-            //     measurementDatasArray.push(userInput.value)
-            // })
-            askNextQuestion();
+            userMessage.length > 0 ? (measurementDatasArray.push(userMessage), askNextQuestion()) : addMessage("Tarp type error", true)
             break;
     }
 }
