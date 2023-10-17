@@ -1,34 +1,6 @@
-import { askNextQuestion, addMessage, measurementDatasArray, currentQuestionIndex, hungarianCounties } from "./script.js";
+import {userMessage, addMessage, askNextQuestion ,supportQuestions, supportDataArray } from "./script";
 
-const validateEmail = (email) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    return pattern.test(email);
-}
-
-const validatePhoneNumber = (phoneNumber) => {
-    const pattern = /^(\+\d{1,4}\s?)?(\d{1,4}\s?|-)?(\d{1,4}\s?|-)?\d{4}$/;
-    return pattern.test(phoneNumber);
-}
-
-const validateDate = (inputDate) => {
-    const pattern = /^\d{4}-\d{2}-\d{2}$/;
-
-    if (!pattern.test(inputDate)) {
-        return false;
-    }
-
-    const date = new Date(inputDate);
-    const today = new Date();
-
-    date.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-
-    return date > today;
-}
-export const MeasurementHandler = (userMessage) => {
-    console.log(userMessage)
-    console.log(currentQuestionIndex)
+export const Support = (userMessage) => {
     switch (currentQuestionIndex) {
         case 1:
             //Name
@@ -63,13 +35,7 @@ export const MeasurementHandler = (userMessage) => {
             validatePhoneNumber(userMessage) ? (measurementDatasArray.push(userMessage), askNextQuestion()) : addMessage("Kérem valós telefonszámot adjon meg!", true)
             break;
         case 9:
-            //TODO: Add a date picker so it works with lesser misunderstanding
-            //Measurement Date
-            validateDate(userMessage) ? (measurementDatasArray.push(userMessage), askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
-            break;
-        case 10:
-            //TarpTypes
-            userMessage.length > 0 ? (addMessage(userMessage, false), measurementDatasArray.push(userMessage), askNextQuestion()) : addMessage("Tarp type error", true)
+            userMessage.length > 0 ? (supportDataArray.push(userMessage), askNextQuestion()) : (addMessage("Kérem adjon meg valamit!", false))
             break;
     }
 }

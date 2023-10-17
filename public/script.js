@@ -8,10 +8,10 @@ const sendBtn = document.getElementById('send-btn');
 const chatbotIcon = document.getElementById('chatbot-icon');
 const chatbox = document.querySelector('.chatbox');
 const helpText = document.getElementById('help-text');
-// export let numberOfTarps;
 export let measurementDatasArray = [];
 export let offerDatasArray = [];
 export let interestDataArray = [];
+export let supportDataArray = [];
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 
@@ -52,7 +52,7 @@ export const freeMeasurementQuestions = [
   'Adja meg email címét:',
   'Adja meg telefonszámát:',
   'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-  'Válassza ki a ponyva típusát: <select id="tarpTypes"><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select> <button id="sendTarpType">Tovább</button>',
+  'Válassza ki a ponyva típusát: <select id="tarpTypes"><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select>',
 ];
 
 export const offerQuestions = [
@@ -73,6 +73,24 @@ export const interestQuestions = [
   'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
   'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
 ]
+
+export const saleQuestions = [
+  'Jelenlegi akcióink: [place items here]'
+]
+
+export const supportQuestions = [
+  'Adja meg a teljes nevét:',
+  'Adja meg a megye nevét:',
+  'Adja meg az irányítószámát:',
+  'Adja meg települése nevét:',
+  'Adja meg utcája nevét:',
+  'Ajda meg a házszámát:',
+  'Adja meg email címét:',
+  'Adja meg telefonszámát:',
+  'Kérem írja le pontosan miben tudunk segíteni',
+  // 'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
+]
+
 //Send button and send with enter key
 sendBtn.addEventListener('click', handleUserInput);
 userInput.addEventListener('keydown', function (e) {
@@ -93,7 +111,6 @@ chatbotIcon.addEventListener('click', function () {
     setTimeout(() => askNextQuestion(), 1000);
   }
 });
-
 
 //Decides whether the question is bot response or user response and puts the output into the corresponting container
 export function addMessage(message, isBot) {
@@ -132,8 +149,6 @@ export function addMessage(message, isBot) {
   })
   // Scroll to the bottom
   chatContent.scrollTop = chatContent.scrollHeight;
-
-
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
@@ -148,7 +163,12 @@ export function handleUserInput() {
     case freeMeasurementQuestions:
       if (currentQuestionIndex == 10) {
         const tarpTypes = document.getElementById("tarpTypes")
+        tarpTypes.addEventListener("change", handleUserInput)
+        tarpTypes.addEventListener("click", () => {
+          console.log("TarpASD")
+        })
         var selectedTarp = tarpTypes.value
+        userInput.ariaPlaceholder = selectedTarp;
         MeasurementHandler(selectedTarp)
       }
       MeasurementHandler(userMessage)
@@ -164,6 +184,7 @@ export function handleUserInput() {
 
 
 function handleMainMenuSelection(buttonId) {
+
   switch (buttonId) {
     case 0:
       currentQuestions = freeMeasurementQuestions;
@@ -181,8 +202,14 @@ function handleMainMenuSelection(buttonId) {
       askNextQuestion();
       break;
     case 3:
+      currentQuestions = saleQuestions;
+      currentQuestionIndex = 0;
+      askNextQuestion();
       break;
     case 4:
+      currentQuestions = supportQuestions;
+      currentQuestionIndex = 0;
+      askNextQuestion();
       break;
   }
 }
@@ -194,9 +221,6 @@ export function askNextQuestion() {
     currentQuestionIndex++;
     return;
   }
-  document.getElementById("sendTarpType").addEventListener("click", () => {
-    console.log(newUserMessage)
-  })
 
 
   switch (currentQuestions) {
@@ -208,6 +232,9 @@ export function askNextQuestion() {
       break;
     case interestQuestions:
       showSummary(interestDataArray, interestQuestions)
+      break;
+    case supportQuestions:
+      showSummary(supportDataArray, supportQuestions)
       break;
   }
 }
