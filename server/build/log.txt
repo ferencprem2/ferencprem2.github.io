@@ -3,3 +3,8 @@
 18:10:50 | 500 |      3.0472ms |       127.0.0.1 | POST    | /setMeasurementData 
 18:11:30 | 500 |      1.8416ms |       127.0.0.1 | POST    | /setMeasurementData 
 18:12:03 | 200 |      5.8383ms |       127.0.0.1 | POST    | /setMeasurementData 
+18:19:09 | 304 |      69.521ms |       127.0.0.1 | GET     | /                   
+18:19:09 | 304 |     19.0571ms |       127.0.0.1 | GET     | /script.js          
+18:19:09 | 304 |     17.4262ms |       127.0.0.1 | GET     | /resultSummary.js   
+18:19:09 | 304 |     13.5307ms |       127.0.0.1 | GET     | /support.js         
+18:19:09 | 304 |     12.2679ms |       127.0.0.1 | GET     | /measurementHandler.js 
