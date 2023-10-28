@@ -88,6 +88,8 @@ export const OfferHandler = (userMessage) => {
       }
     }
 
+    //TODO: Calculate the price
+
     // Check for return to main menu:
     askNextQuestion();
     return;

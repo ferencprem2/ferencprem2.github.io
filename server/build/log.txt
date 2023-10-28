@@ -1,0 +1,5 @@
+18:09:21 | 404 |            0s |       127.0.0.1 | POST    | /                    | Cannot POST /
+18:09:40 | 400 |            0s |       127.0.0.1 | POST    | /setMeasurementData 
+18:10:50 | 500 |      3.0472ms |       127.0.0.1 | POST    | /setMeasurementData 
+18:11:30 | 500 |      1.8416ms |       127.0.0.1 | POST    | /setMeasurementData 
+18:12:03 | 200 |      5.8383ms |       127.0.0.1 | POST    | /setMeasurementData 

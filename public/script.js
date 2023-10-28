@@ -1,6 +1,7 @@
 import { OfferHandler } from "./offerHandler.js";
 import { showSummary } from "./resultSummary.js";
 import { MeasurementHandler } from "./measurementHandler.js";
+import { Support } from "./support.js";
 
 export const chatContent = document.getElementById('chat-content');
 export const userInput = document.getElementById('user-input');
@@ -8,10 +9,31 @@ const sendBtn = document.getElementById('send-btn');
 const chatbotIcon = document.getElementById('chatbot-icon');
 const chatbox = document.querySelector('.chatbox');
 const helpText = document.getElementById('help-text');
-export let measurementDatasArray = [];
+export let measurementDatasArray = {
+  name: null,
+  county: null,
+  zipCode: null,
+  townName: null,
+  streetName: null,
+  houseNumber: null,
+  email: null,
+  phoneNumber: null,
+  measurementDate: null,
+  tarpTypes: null
+};
 export let offerDatasArray = [];
 export let interestDataArray = [];
-export let supportDataArray = [];
+export let supportDataArray = {
+  name: null,
+  county: null,
+  zipCode: null,
+  townName: null,
+  streetName: null,
+  houseNumber: null,
+  email: null,
+  phoneNumber: null,
+  customData: null
+};
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 
@@ -52,7 +74,7 @@ export const freeMeasurementQuestions = [
   'Adja meg email címét:',
   'Adja meg telefonszámát:',
   'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-  'Válassza ki a ponyva típusát: <select id="tarpTypes"><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select>',
+  'Válassza ki a ponyva típusát: <select id="tarpTypes" onchange="userInput()"><option value="">-</option><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select>',
 ];
 
 export const offerQuestions = [
@@ -114,7 +136,7 @@ chatbotIcon.addEventListener('click', function () {
 
 //Decides whether the question is bot response or user response and puts the output into the corresponting container
 export function addMessage(message, isBot) {
-  if (currentQuestions != menuQuestions && message.length == 0) {
+  if (currentQuestions != menuQuestions && message.length == 0 && currentQuestions == freeMeasurementQuestions && currentQuestionIndex != 10) {
     message = "Kérem töltse ki a mezőt!";
     isBot = true;
   }
@@ -152,36 +174,41 @@ export function addMessage(message, isBot) {
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
-export function handleUserInput() {
+
+function handleUserInput() {
   const userMessage = userInput.value.trim();
-  addMessage(userMessage, false);  // We should specify that this is a user message
+  addMessage(userMessage, false); 
+  // We should specify that this is a user message
 
   if (userMessage.length === 0) return;
   userInput.value = '';
-
+  console.log(currentQuestionIndex)
   switch (currentQuestions) {
     case freeMeasurementQuestions:
-      if (currentQuestionIndex == 10) {
-        const tarpTypes = document.getElementById("tarpTypes")
-        tarpTypes.addEventListener("change", handleUserInput)
-        tarpTypes.addEventListener("click", () => {
-          console.log("TarpASD")
-        })
-        var selectedTarp = tarpTypes.value
-        userInput.ariaPlaceholder = selectedTarp;
-        MeasurementHandler(selectedTarp)
-      }
+      // if (currentQuestionIndex == 10) {
+      //   const tarpTypes = document.getElementById("tarpTypes")
+      //   // tarpTypes.addEventListener("change", handleUserInput)
+      //   var selectedTarp = tarpTypes.value
+      //   MeasurementHandler(selectedTarp)
+      // }
       MeasurementHandler(userMessage)
       break;
     case offerQuestions:
       OfferHandler(userMessage)
+      break;
+    case supportQuestions:
+      Support(userMessage)
       break;
     case menuQuestions:
       handleMainMenuSelection();
       return;
   }
 }
-
+window.userInput = () => {
+  var tarp = document.getElementById("tarpTypes")
+  userInput.value = tarp.value
+  handleUserInput()
+};
 
 function handleMainMenuSelection(buttonId) {
 
@@ -226,12 +253,6 @@ export function askNextQuestion() {
   switch (currentQuestions) {
     case freeMeasurementQuestions:
       showSummary(measurementDatasArray, freeMeasurementQuestions)
-      break;
-    case offerQuestions:
-      showSummary(offerDatasArray, offerQuestions)
-      break;
-    case interestQuestions:
-      showSummary(interestDataArray, interestQuestions)
       break;
     case supportQuestions:
       showSummary(supportDataArray, supportQuestions)

@@ -1,3 +1,5 @@
+import { measurementDatasArray, supportDataArray, supportQuestions } from "./script.js";
+
 const resultSummary = document.getElementById('resultContent');
 const resultDiv = document.getElementById('results')
 const doneButton = document.getElementById('sendButton')
@@ -35,8 +37,34 @@ export function showSummary(DataArray, questionArray) {
     })
     
     doneButton.addEventListener('click', () => {
-        //TODO: Confirmation for the datas, yes or no
+        //TODO: Confirmation for the datas, yes or no-
+        const URL = "http://localhost:8080/"
+        switch(DataArray) {
+            case measurementDatasArray: 
+                console.log("freeAsd")
+                sendJsonData(measurementDatasArray, URL, "setMeasurementData")
+                break;
+            case supportDataArray:
+                console.log("supAssd")
+                sendJsonData(supportDataArray, URL, "setSupportData")
+                break;
+        }
+
         resultDiv.style.visibility = 'hidden'
     })
 
+}
+
+
+function sendJsonData(DataArray, URL, address) {
+    fetch(URL + address, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(DataArray)
+})
+.then(response => response.text())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
 }
