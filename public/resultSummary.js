@@ -1,4 +1,4 @@
-import { measurementDatasArray, supportDataArray, supportQuestions } from "./script.js";
+import { measurementDatasArray, supportDataArray } from "./script.js";
 
 const resultSummary = document.getElementById('resultContent');
 const resultDiv = document.getElementById('results')

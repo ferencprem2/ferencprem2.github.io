@@ -1,5 +1,5 @@
-import { askNextQuestion, addMessage, offerQuestions, offerDatasArray, menuQuestions, currentQuestionIndex, currentQuestions } from "./script.js";
-
+import { askNextQuestion, addMessage, offerDatasArray ,currentQuestionIndex, currentQuestions } from "./script.js";
+import { offerQuestions, menuQuestions } from "./chatbotDatas/datas.js";
 
 let numberOfTarps;
 

@@ -2,6 +2,7 @@ import { OfferHandler } from "./offerHandler.js";
 import { showSummary } from "./resultSummary.js";
 import { MeasurementHandler } from "./measurementHandler.js";
 import { Support } from "./support.js";
+import { menuQuestions, freeMeasurementQuestions, offerQuestions, saleQuestions, supportQuestions } from "./chatbotDatas/datas.js";
 
 export const chatContent = document.getElementById('chat-content');
 export const userInput = document.getElementById('user-input');
@@ -21,8 +22,8 @@ export let measurementDatasArray = {
   measurementDate: null,
   tarpTypes: null
 };
-export let offerDatasArray = [];
-export let interestDataArray = [];
+export let offerDatasArray = {};
+export let interestDataArray = {};
 export let supportDataArray = {
   name: null,
   county: null,
@@ -37,81 +38,68 @@ export let supportDataArray = {
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 
-export const menuQuestions = [
-  `Üdvözöljük a ponyvaexpressz oldalán, kérem válasszon a következő lehetőségek közül: <br> Ingyenes felmérés igénylése <button id="freeMeasurementButton">Választ</button> <br> Árajánlat kérése meglévő méretek alapján <button id="offersButton">Választ</button> <br> Érdeklődés <button id="interestButton">Választ</button> <br> Aktuális akcióinkról történő tájékozódás <button id="saleButton">Választ</button> <br> Ügyfélszolgálat <button id="supportButton">Választ</button>`
-]
 
-export const hungarianCounties = [
-  "Pest vármegye",
-  "Baranya vármegye",
-  "Bács-Kiskun vármegye",
-  "Békés vármegye",
-  "Borsod-Abaúj-Zemplén vármegye",
-  "Csongrád vármegye",
-  "Fejér vármegye",
-  "Győr-Moson-Sopron vármegye",
-  "Hajdú-Bihar vármegye",
-  "Heves vármegye",
-  "Jász-Nagykun-Szolnok vármegye",
-  "Komárom-Esztergom vármegye",
-  "Nógrád vármegye",
-  "Pest vármegye",
-  "Somogy vármegye",
-  "Szabolcs-Szatmár-Bereg vármegye",
-  "Tolna vármegye",
-  "Vas vármegye",
-  "Veszprém vármegye",
-  "Zala vármegye"
-]
 
-export const freeMeasurementQuestions = [
-  'Adja meg a teljes nevét:',
-  'Adja meg a megye nevét:',
-  'Adja meg az irányítószámát:',
-  'Adja meg települése nevét:',
-  'Adja meg utcája nevét:',
-  'Ajda meg a házszámát:',
-  'Adja meg email címét:',
-  'Adja meg telefonszámát:',
-  'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-  'Válassza ki a ponyva típusát: <select id="tarpTypes" onchange="userInput()"><option value="">-</option><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select>',
-];
+//Transforms the input field into a datepicker
 
-export const offerQuestions = [
-  'Adja meg a nevét: ',
-  'Adja meg hány darab ponyvát szeretne: '
-]
+export function transformToDatepicker(inputField) {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
 
-export const interestQuestions = [
-  'Kérem írja le pontosan mit szeretne',
-  'Adja meg a teljes nevét:',
-  'Adja meg a megye nevét:',
-  'Adja meg az irányítószámát:',
-  'Adja meg települése nevét:',
-  'Adja meg utcája nevét:',
-  'Ajda meg a házszámát:',
-  'Adja meg email címét:',
-  'Adja meg telefonszámát:',
-  'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-  'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
-]
+  today = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
 
-export const saleQuestions = [
-  'Jelenlegi akcióink: [place items here]'
-]
+  inputField.type = 'date';
+  inputField.min = today; // Set the min attribute to today's date
+}
 
-export const supportQuestions = [
-  'Adja meg a teljes nevét:',
-  'Adja meg a megye nevét:',
-  'Adja meg az irányítószámát:',
-  'Adja meg települése nevét:',
-  'Adja meg utcája nevét:',
-  'Ajda meg a házszámát:',
-  'Adja meg email címét:',
-  'Adja meg telefonszámát:',
-  'Kérem írja le pontosan miben tudunk segíteni',
-  // 'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
-]
+//Replaces input field with a dropDown
+export function replaceInputWithSelect(inputField, dataArray, onChangeFunc) {
+  // Create a new select element
+  var select = document.createElement('select');
+  select.id = inputField.id; // Carry over the original input's ID
+  select.name = inputField.name; // Carry over the name if needed
+
+  // Populate the select element with options
+  dataArray.forEach(function(item) {
+      var option = document.createElement('option');
+      option.value = item;
+      option.textContent = item;
+      select.appendChild(option);
+  });
+
+  // Replace the input field with the select element in the DOM
+  select.onchange = onChangeFunc;
+  inputField.parentNode.replaceChild(select, inputField);
+}
+
+//Replaces the dropDown with an input filed
+export function replaceSelectWithInput(selectElement) {
+  // Create a new input element
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.id = selectElement.id; // Carry over the original select's ID
+  input.name = selectElement.name; // Carry over the name if needed
+
+  // Replace the select element with the input field in the DOM
+  selectElement.parentNode.replaceChild(input, selectElement);
+}
+
+
+export function resetToTextInput(inputField) {
+  inputField.type = 'text'; // Reset the input type to text
+  inputField.value = ''; // Clear any existing value
+  inputField.placeholder = ''; // Reset placeholder if any
+  inputField.removeAttribute('min'); // Remove min attribute if set
+  inputField.removeAttribute('maxLength'); // Remove maxLength attribute if set
+  // Remove any other attributes or event listeners specific to other input types
+}
+
+export function getDataFromSelect(selectedElementId, dataArray){
+  userInput.value = dataArray[selectedElementId]
+}
+
 
 //Send button and send with enter key
 sendBtn.addEventListener('click', handleUserInput);
@@ -204,9 +192,9 @@ function handleUserInput() {
       return;
   }
 }
+
 window.userInput = () => {
-  var tarp = document.getElementById("tarpTypes")
-  userInput.value = tarp.value
+  userInput.value = inputField.value
   handleUserInput()
 };
 

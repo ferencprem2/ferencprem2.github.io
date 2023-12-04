@@ -1,5 +1,6 @@
-import {addMessage, askNextQuestion, hungarianCounties ,currentQuestionIndex,supportDataArray } from "./script.js";
-import { validateEmail, validatePhoneNumber} from "./validators.js";
+import { addMessage, askNextQuestion, currentQuestionIndex, supportDataArray } from "./script.js";
+import { validateEmail, validatePhoneNumber } from "./validators.js";
+import { hungarianCounties } from "./chatbotDatas/datas.js";
 
 export const Support = (userMessage) => {
     console.log(userMessage)

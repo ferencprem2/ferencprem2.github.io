@@ -1,17 +1,20 @@
-import { askNextQuestion, addMessage, measurementDatasArray, currentQuestionIndex, hungarianCounties} from "./script.js";
+import { measurementDatasArray, askNextQuestion, addMessage, currentQuestionIndex, transformToDatepicker, resetToTextInput, replaceInputWithSelect, replaceSelectWithInput, userInput, getDataFromSelect} from "./script.js";
 import { validateEmail, validatePhoneNumber, validateDate } from "./validators.js";
-
+import { hungarianCounties } from "./chatbotDatas/datas.js";
 export const MeasurementHandler = (userMessage) => {
+    var inputField = document.getElementById("user-input");
     console.log(userMessage)
     console.log(currentQuestionIndex)
     switch (currentQuestionIndex) {
         case 1:
             //Name
             userMessage.length == 0 ? addMessage("Kérem töltse ki a mezőt!", true) : (measurementDatasArray.name = userMessage, askNextQuestion())
+            replaceInputWithSelect(inputField, hungarianCounties, userInput)
             break;
         case 2:
             //County
             !hungarianCounties.includes(userMessage) ? addMessage("Kérem létező megyét adjon meg!", true) : (measurementDatasArray.county = userMessage, askNextQuestion())
+            replaceSelectWithInput(inputField);
             break;
         case 3:
             //Zip Code
@@ -36,9 +39,10 @@ export const MeasurementHandler = (userMessage) => {
         case 8:
             //Phone Number
             validatePhoneNumber(userMessage) ? (measurementDatasArray.phoneNumber = userMessage, askNextQuestion()) : addMessage("Kérem valós telefonszámot adjon meg!", true)
+            transformToDatepicker(inputField)
             break;
         case 9:
-            //TODO: Add a date picker so it works with lesser misunderstanding
+            //TODO: Add ar so it works with lesser misunderstanding
             //Measurement Date
             validateDate(userMessage) ? (measurementDatasArray.measurementDate = userMessage, askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
             break;
