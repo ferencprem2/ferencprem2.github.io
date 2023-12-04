@@ -1,5 +1,5 @@
-import { measurementDatasArray, askNextQuestion, addMessage, currentQuestionIndex, transformToDatepicker, resetToTextInput, replaceInputWithSelect, replaceSelectWithInput, userInput, getDataFromSelect} from "./script.js";
-import { validateEmail, validatePhoneNumber, validateDate } from "./validators.js";
+import { measurementDatasArray, askNextQuestion, addMessage, currentQuestionIndex, transformToDatepicker, resetToTextInput, replaceInputWithSelect, replaceSelectWithInput, transformToPhoneInput} from "./script.js";
+import { validateEmail, validatePhoneNumber, validateDate, validateZipCode } from "./validators.js";
 import { hungarianCounties } from "./chatbotDatas/datas.js";
 export const MeasurementHandler = (userMessage) => {
     var inputField = document.getElementById("user-input");
@@ -9,7 +9,7 @@ export const MeasurementHandler = (userMessage) => {
         case 1:
             //Name
             userMessage.length == 0 ? addMessage("Kérem töltse ki a mezőt!", true) : (measurementDatasArray.name = userMessage, askNextQuestion())
-            replaceInputWithSelect(inputField, hungarianCounties, userInput)
+            replaceInputWithSelect(inputField, hungarianCounties)
             break;
         case 2:
             //County
@@ -18,7 +18,7 @@ export const MeasurementHandler = (userMessage) => {
             break;
         case 3:
             //Zip Code
-            userMessage.length != 4 ? addMessage("Kérem létező irányítószámot adjon meg!", true) : (measurementDatasArray.zipCode = userMessage, askNextQuestion())
+            !validateZipCode(userMessage) ? addMessage("Kérem létező irányítószámot adjon meg!", true) : (measurementDatasArray.zipCode = userMessage, askNextQuestion())
             break;
         case 4:
             //Town Name
@@ -35,6 +35,7 @@ export const MeasurementHandler = (userMessage) => {
         case 7:
             //Email
             validateEmail(userMessage) ? (measurementDatasArray.email = userMessage, askNextQuestion()) : addMessage("Kérem létező email címet adjon meg!", true)
+            transformToPhoneInput(inputField);
             break;
         case 8:
             //Phone Number

@@ -38,10 +38,23 @@ export let supportDataArray = {
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 
+//Transforms input field to phone
+export function transformToPhoneInput(inputField) {
+  inputField.type = 'tel';
+  inputField.value = '+36'; // Set the starting value to +36
+  inputField.maxLength = 11; // Limit total input length to 11 characters (+36 included)
+  inputField.placeholder = 'Enter phone number';
+  inputField.pattern = "+36-[0-9]{2}-[0-9]{3}-[0-9]{4}"
 
+  // Additional logic to ensure that +36 is always present
+  inputField.addEventListener('input', function () {
+    if (!this.value.startsWith('+36')) {
+      this.value = '+36' + this.value.replace('+36', '').substring(0, 10);
+    }
+  });
+}
 
 //Transforms the input field into a datepicker
-
 export function transformToDatepicker(inputField) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
@@ -55,22 +68,20 @@ export function transformToDatepicker(inputField) {
 }
 
 //Replaces input field with a dropDown
-export function replaceInputWithSelect(inputField, dataArray, onChangeFunc) {
+export function replaceInputWithSelect(inputField, dataArray,) {
   // Create a new select element
   var select = document.createElement('select');
   select.id = inputField.id; // Carry over the original input's ID
-  select.name = inputField.name; // Carry over the name if needed
 
   // Populate the select element with options
-  dataArray.forEach(function(item) {
-      var option = document.createElement('option');
-      option.value = item;
-      option.textContent = item;
-      select.appendChild(option);
+  dataArray.forEach(function (item) {
+    var option = document.createElement('option');
+    option.value = item;
+    option.textContent = item;
+    select.appendChild(option);
   });
 
   // Replace the input field with the select element in the DOM
-  select.onchange = onChangeFunc;
   inputField.parentNode.replaceChild(select, inputField);
 }
 
@@ -79,26 +90,22 @@ export function replaceSelectWithInput(selectElement) {
   // Create a new input element
   var input = document.createElement('input');
   input.type = 'text';
+  input.placeholder = "Írja válaszát ide";
   input.id = selectElement.id; // Carry over the original select's ID
-  input.name = selectElement.name; // Carry over the name if needed
 
   // Replace the select element with the input field in the DOM
   selectElement.parentNode.replaceChild(input, selectElement);
 }
 
-
 export function resetToTextInput(inputField) {
   inputField.type = 'text'; // Reset the input type to text
   inputField.value = ''; // Clear any existing value
-  inputField.placeholder = ''; // Reset placeholder if any
+  inputField.placeholder = "Írja válaszát ide";
   inputField.removeAttribute('min'); // Remove min attribute if set
   inputField.removeAttribute('maxLength'); // Remove maxLength attribute if set
   // Remove any other attributes or event listeners specific to other input types
 }
 
-export function getDataFromSelect(selectedElementId, dataArray){
-  userInput.value = dataArray[selectedElementId]
-}
 
 
 //Send button and send with enter key
@@ -164,12 +171,21 @@ export function addMessage(message, isBot) {
 //Function that handles the user inputs, and displays the questions referring to the user input
 
 function handleUserInput() {
-  const userMessage = userInput.value.trim();
-  addMessage(userMessage, false); 
+  var parent = document.getElementsByClassName("user-input-parent")[0];
+  var element = parent.children[0]
+  var userMessage;
+  if (element.tagName === "INPUT") {
+    userMessage = element.value;
+  } else if (element.tagName === "SELECT") {
+    var selectedOption = element.options[element.selectedIndex]
+    userMessage = selectedOption.text
+  }
+  addMessage(userMessage, false);
   // We should specify that this is a user message
 
   if (userMessage.length === 0) return;
   userInput.value = '';
+  element.value = '';
   console.log(currentQuestionIndex)
   switch (currentQuestions) {
     case freeMeasurementQuestions:

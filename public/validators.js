@@ -24,3 +24,14 @@ export const validateDate = (inputDate) => {
 
     return date > today;
 }
+
+export function validateZipCode(zipCode) {
+    var regex = /^\d{4}$/;
+    var errorMessage = document.getElementById('errorMessage');
+    
+    if (regex.test(zipCode)) {
+        return true
+    } else {
+        return false
+    }
+}
