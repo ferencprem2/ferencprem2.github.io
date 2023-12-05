@@ -41,10 +41,9 @@ export let currentQuestionIndex = 0;
 //Transforms input field to phone
 export function transformToPhoneInput(inputField) {
   inputField.type = 'tel';
-  inputField.value = '+36'; // Set the starting value to +36
-  inputField.maxLength = 11; // Limit total input length to 11 characters (+36 included)
+  inputField.maxLength = 12; // Limit total input length to 11 characters (+36 included)
   inputField.placeholder = 'Enter phone number';
-  inputField.pattern = "+36-[0-9]{2}-[0-9]{3}-[0-9]{4}"
+  inputField.pattern = "\+36 \d{2} \d{3} \d{4}"
 
   // Additional logic to ensure that +36 is always present
   inputField.addEventListener('input', function () {
@@ -56,6 +55,7 @@ export function transformToPhoneInput(inputField) {
 
 //Transforms the input field into a datepicker
 export function transformToDatepicker(inputField) {
+  inputField.type = 'date';
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -63,7 +63,6 @@ export function transformToDatepicker(inputField) {
 
   today = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
 
-  inputField.type = 'date';
   inputField.min = today; // Set the min attribute to today's date
 }
 
@@ -81,6 +80,12 @@ export function replaceInputWithSelect(inputField, dataArray,) {
     select.appendChild(option);
   });
 
+  select.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      handleUserInput();
+    }
+  });
+
   // Replace the input field with the select element in the DOM
   inputField.parentNode.replaceChild(select, inputField);
 }
@@ -93,6 +98,12 @@ export function replaceSelectWithInput(selectElement) {
   input.placeholder = "Írja válaszát ide";
   input.id = selectElement.id; // Carry over the original select's ID
 
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      handleUserInput();
+    }
+  });
   // Replace the select element with the input field in the DOM
   selectElement.parentNode.replaceChild(input, selectElement);
 }

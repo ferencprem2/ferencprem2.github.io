@@ -1,6 +1,6 @@
 import { measurementDatasArray, askNextQuestion, addMessage, currentQuestionIndex, transformToDatepicker, resetToTextInput, replaceInputWithSelect, replaceSelectWithInput, transformToPhoneInput} from "./script.js";
 import { validateEmail, validatePhoneNumber, validateDate, validateZipCode } from "./validators.js";
-import { hungarianCounties } from "./chatbotDatas/datas.js";
+import { hungarianCounties, tarpTypes } from "./chatbotDatas/datas.js";
 export const MeasurementHandler = (userMessage) => {
     var inputField = document.getElementById("user-input");
     console.log(userMessage)
@@ -46,6 +46,7 @@ export const MeasurementHandler = (userMessage) => {
             //TODO: Add ar so it works with lesser misunderstanding
             //Measurement Date
             validateDate(userMessage) ? (measurementDatasArray.measurementDate = userMessage, askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
+            replaceInputWithSelect(inputField, tarpTypes)
             break;
         case 10:
             //TarpTypes

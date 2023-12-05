@@ -5,8 +5,16 @@ export const validateEmail = (email) => {
 }
 
 export const validatePhoneNumber = (phoneNumber) => {
-    const pattern = /^(\+\d{1,4}\s?)?(\d{1,4}\s?|-)?(\d{1,4}\s?|-)?\d{4}$/;
-    return pattern.test(phoneNumber);
+    var phoneInput = document.getElementById('phoneInput').value;
+    var regex = /^\+36 \d{2} \d{3} \d{4}$/;
+
+    if (!regex.test(phoneInput)) {
+        document.getElementById('message').textContent = 'Invalid format. Please use +36 xx xxx xxxx.';
+        return false
+    } else {
+        document.getElementById('message').textContent = '';
+        return true
+    }
 }
 
 export const validateDate = (inputDate) => {

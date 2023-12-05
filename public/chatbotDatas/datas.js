@@ -24,6 +24,13 @@ export const menuQuestions = [
     "Veszprém vármegye",
     "Zala vármegye"
   ]
+
+  export const tarpTypes = [
+    'Terasz ponyva',
+    'Filagória ponyva',
+    'Kocsi beálló',
+    'Egyéb'
+  ]
   
   export const freeMeasurementQuestions = [
     'Adja meg a teljes nevét:',
@@ -35,7 +42,7 @@ export const menuQuestions = [
     'Adja meg email címét:',
     'Adja meg telefonszámát:',
     'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
-    'Válassza ki a ponyva típusát: <select id="tarpTypes" onchange="userInput()"><option value="">-</option><option value="terasz ponyva">Terasz ponyva</option><option value="filagória ponyva">Filagória ponyva</option><option value="kocsi beálló">Kocsi beálló</option><option value="egyéb">Egyéb</option></select>',
+    'Válassza ki a ponyva típusát: '
   ];
   
   export const offerQuestions = [
