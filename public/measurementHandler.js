@@ -39,7 +39,7 @@ export const MeasurementHandler = (userMessage) => {
             break;
         case 8:
             //Phone Number
-            validatePhoneNumber(userMessage) ? (measurementDatasArray.phoneNumber = userMessage, askNextQuestion()) : addMessage("Kérem valós telefonszámot adjon meg!", true)
+            !validatePhoneNumber(userMessage) ? (measurementDatasArray.phoneNumber = userMessage, askNextQuestion()) : addMessage("Kérem valós telefonszámot adjon meg!", true)
             transformToDatepicker(inputField)
             break;
         case 9:

@@ -27,3 +27,5 @@
 21:27:33 | 200 |       265.7µs |       127.0.0.1 | GET     | /validators.js      
 21:27:33 | 404 |       985.1µs |       127.0.0.1 | GET     | /favicon.ico         | Cannot GET /favicon.ico
 21:27:46 | 404 |         567µs |       127.0.0.1 | GET     | /PonyvaexpresszLogo.PNG  | Cannot GET /PonyvaexpresszLogo.PNG
+19:56:25 | 500 |    6.021969ms |       127.0.0.1 | POST    | /setMeasurementData 
+20:01:33 | 500 |     319.541µs |       127.0.0.1 | POST    | /setMeasurementData 

@@ -38,23 +38,25 @@ export let supportDataArray = {
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 
+function enforcePhoneNumberFormat(event) {
+  if (!event.target.value.startsWith('+36')) {
+    event.target.value = '+36' + event.target.value.replace('+36', '').substring(0, 10);
+  }
+}
+
 //Transforms input field to phone
 export function transformToPhoneInput(inputField) {
   inputField.type = 'tel';
-  inputField.maxLength = 12; // Limit total input length to 11 characters (+36 included)
+  inputField.maxLength = 12;
   inputField.placeholder = 'Enter phone number';
-  inputField.pattern = "\+36 \d{2} \d{3} \d{4}"
-
+  inputField.className
   // Additional logic to ensure that +36 is always present
-  inputField.addEventListener('input', function () {
-    if (!this.value.startsWith('+36')) {
-      this.value = '+36' + this.value.replace('+36', '').substring(0, 10);
-    }
-  });
+  inputField.addEventListener('input', enforcePhoneNumberFormat);
 }
 
 //Transforms the input field into a datepicker
 export function transformToDatepicker(inputField) {
+  inputField.removeEventListener('input', enforcePhoneNumberFormat)
   inputField.type = 'date';
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
