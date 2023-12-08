@@ -52,6 +52,7 @@ export function transformToPhoneInput(inputField) {
   inputField.type = 'tel';
   inputField.maxLength = 12;
   inputField.placeholder = 'Enter phone number';
+  inputField.className
   // Additional logic to ensure that +36 is always present
   inputField.addEventListener('input', enforcePhoneNumberFormat);
 }
@@ -68,9 +69,8 @@ export function transformToDatepicker(inputField) {
   today = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
 
   inputField.min = today; // Set the min attribute to today's date
-
-
 }
+
 
 //Replaces input field with a dropDown
 export function replaceInputWithSelect(inputField, dataArray,) {

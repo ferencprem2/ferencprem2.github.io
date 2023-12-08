@@ -47,7 +47,6 @@ export const MeasurementHandler = (userMessage) => {
             //Measurement Date
             validateDate(userMessage) ? (measurementDatasArray.measurementDate = userMessage, askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
             replaceInputWithSelect(inputField, tarpTypes)
-            console.log(typeof(userMessage))
             break;
         case 10:
             //TarpTypes
