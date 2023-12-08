@@ -8,7 +8,7 @@ CREATE TABLE MeasurementData(
     HouseNumber VARCHAR(15),
     Email VARCHAR(100),   -- Increased the length
     PhoneNumber VARCHAR(15),
-    MeasurementDate DATETIME,
+    MeasurementDate VARCHAR(10),
     TarpTypes Varchar(20),
     PRIMARY KEY(PersonId)
 )

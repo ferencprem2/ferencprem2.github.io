@@ -22,7 +22,10 @@ export let measurementDatasArray = {
   measurementDate: null,
   tarpTypes: null
 };
-export let offerDatasArray = {};
+export let offerDatasArray = {
+  name: null,
+  tarpCount: null
+};
 export let interestDataArray = {};
 export let supportDataArray = {
   name: null,
@@ -38,24 +41,25 @@ export let supportDataArray = {
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 
+function enforcePhoneNumberFormat(event) {
+  if (!event.target.value.startsWith('+36')) {
+    event.target.value = '+36' + event.target.value.replace('+36', '').substring(0, 10);
+  }
+}
+
 //Transforms input field to phone
 export function transformToPhoneInput(inputField) {
   inputField.type = 'tel';
-  inputField.value = '+36'; // Set the starting value to +36
-  inputField.maxLength = 11; // Limit total input length to 11 characters (+36 included)
+  inputField.maxLength = 12;
   inputField.placeholder = 'Enter phone number';
-  inputField.pattern = "+36-[0-9]{2}-[0-9]{3}-[0-9]{4}"
-
   // Additional logic to ensure that +36 is always present
-  inputField.addEventListener('input', function () {
-    if (!this.value.startsWith('+36')) {
-      this.value = '+36' + this.value.replace('+36', '').substring(0, 10);
-    }
-  });
+  inputField.addEventListener('input', enforcePhoneNumberFormat);
 }
 
 //Transforms the input field into a datepicker
 export function transformToDatepicker(inputField) {
+  inputField.removeEventListener('input', enforcePhoneNumberFormat)
+  inputField.type = 'date';
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -63,8 +67,9 @@ export function transformToDatepicker(inputField) {
 
   today = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
 
-  inputField.type = 'date';
   inputField.min = today; // Set the min attribute to today's date
+
+
 }
 
 //Replaces input field with a dropDown
@@ -81,6 +86,12 @@ export function replaceInputWithSelect(inputField, dataArray,) {
     select.appendChild(option);
   });
 
+  select.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      handleUserInput();
+    }
+  });
+
   // Replace the input field with the select element in the DOM
   inputField.parentNode.replaceChild(select, inputField);
 }
@@ -93,6 +104,12 @@ export function replaceSelectWithInput(selectElement) {
   input.placeholder = "Írja válaszát ide";
   input.id = selectElement.id; // Carry over the original select's ID
 
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      handleUserInput();
+    }
+  });
   // Replace the select element with the input field in the DOM
   selectElement.parentNode.replaceChild(input, selectElement);
 }

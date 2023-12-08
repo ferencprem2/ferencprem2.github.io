@@ -25,7 +25,7 @@ body {
   width: 80px;
   /* Adjust based on your preference */
   height: 40px;
-  background-image: url('PonyvaexpresszLogo.PNG');
+  background-image: url('PonyvaexpresszLogo.png');
   background-size: cover;
 }
 
@@ -122,7 +122,7 @@ body {
   width: 101px;
   height: 51px;
   cursor: pointer;
-  background-image: url('PonyvaexpresszLogo.PNG');
+  background-image: url('PonyvaexpresszLogo.png');
   /* Replace with your chatbot icon image */
   background-size: cover;
   z-index: 1000;

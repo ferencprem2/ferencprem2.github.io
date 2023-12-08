@@ -11,9 +11,11 @@ import (
 func Controller_Measurement(ctx *fiber.Ctx) error {
 	var measurement models.Measurement
 
+	log.Println("1")
 	if err := ctx.BodyParser(&measurement); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
+	log.Println("2")
 
 	measurementId, err := database.AddMeasurement(measurement)
 	if err != nil {

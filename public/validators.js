@@ -5,8 +5,13 @@ export const validateEmail = (email) => {
 }
 
 export const validatePhoneNumber = (phoneNumber) => {
-    const pattern = /^(\+\d{1,4}\s?)?(\d{1,4}\s?|-)?(\d{1,4}\s?|-)?\d{4}$/;
-    return pattern.test(phoneNumber);
+    var regex = /^\+36 \d{2} \d{3} \d{4}$/;
+
+    if (!regex.test(phoneNumber)) {
+        return false
+    } else {
+        return true
+    }
 }
 
 export const validateDate = (inputDate) => {
