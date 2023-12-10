@@ -2,42 +2,16 @@ import { OfferHandler } from "./offerHandler.js";
 import { showSummary } from "./resultSummary.js";
 import { MeasurementHandler } from "./measurementHandler.js";
 import { Support } from "./support.js";
-import { menuQuestions, freeMeasurementQuestions, offerQuestions, saleQuestions, supportQuestions } from "./chatbotDatas/datas.js";
+import { Interest } from './interest,.js';
+import { menuQuestions, freeMeasurementQuestions, offerQuestions, saleQuestions, supportQuestions, interestQuestions } from "./chatbotDatas/datas.js";
+import { interestDataArray, measurementDatasArray, supportDataArray } from "./models/chatBotModels.js";
 
 export const chatContent = document.getElementById('chat-content');
 export const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const chatbotIcon = document.getElementById('chatbot-icon');
 const chatbox = document.querySelector('.chatbox');
-const helpText = document.getElementById('help-text');
-export let measurementDatasArray = {
-  name: null,
-  county: null,
-  zipCode: null,
-  townName: null,
-  streetName: null,
-  houseNumber: null,
-  email: null,
-  phoneNumber: null,
-  measurementDate: null,
-  tarpTypes: null
-};
-export let offerDatasArray = {
-  name: null,
-  tarpCount: null
-};
-export let interestDataArray = {};
-export let supportDataArray = {
-  name: null,
-  county: null,
-  zipCode: null,
-  townName: null,
-  streetName: null,
-  houseNumber: null,
-  email: null,
-  phoneNumber: null,
-  customData: null
-};
+
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 
@@ -61,26 +35,25 @@ export function transformToPhoneInput(inputField) {
 export function transformToDatepicker(inputField) {
   inputField.removeEventListener('input', enforcePhoneNumberFormat)
   inputField.type = 'date';
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var yyyy = today.getFullYear();
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, '0');
+  let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  let yyyy = today.getFullYear();
 
   today = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
 
   inputField.min = today; // Set the min attribute to today's date
 }
 
-
 //Replaces input field with a dropDown
 export function replaceInputWithSelect(inputField, dataArray,) {
   // Create a new select element
-  var select = document.createElement('select');
+  let select = document.createElement('select');
   select.id = inputField.id; // Carry over the original input's ID
 
   // Populate the select element with options
   dataArray.forEach(function (item) {
-    var option = document.createElement('option');
+    let option = document.createElement('option');
     option.value = item;
     option.textContent = item;
     select.appendChild(option);
@@ -99,7 +72,7 @@ export function replaceInputWithSelect(inputField, dataArray,) {
 //Replaces the dropDown with an input filed
 export function replaceSelectWithInput(selectElement) {
   // Create a new input element
-  var input = document.createElement('input');
+  let input = document.createElement('input');
   input.type = 'text';
   input.placeholder = "Írja válaszát ide";
   input.id = selectElement.id; // Carry over the original select's ID
@@ -122,8 +95,6 @@ export function resetToTextInput(inputField) {
   inputField.removeAttribute('maxLength'); // Remove maxLength attribute if set
   // Remove any other attributes or event listeners specific to other input types
 }
-
-
 
 //Send button and send with enter key
 sendBtn.addEventListener('click', handleUserInput);
@@ -186,19 +157,18 @@ export function addMessage(message, isBot) {
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
-
 function handleUserInput() {
-  var parent = document.getElementsByClassName("user-input-parent")[0];
-  var element = parent.children[0]
-  var userMessage;
+  let parent = document.getElementsByClassName("user-input-parent")[0];
+  let element = parent.children[0]
+  let userMessage;
+  
   if (element.tagName === "INPUT") {
     userMessage = element.value;
   } else if (element.tagName === "SELECT") {
-    var selectedOption = element.options[element.selectedIndex]
+    let selectedOption = element.options[element.selectedIndex]
     userMessage = selectedOption.text
   }
   addMessage(userMessage, false);
-  // We should specify that this is a user message
 
   if (userMessage.length === 0) return;
   userInput.value = '';
@@ -206,16 +176,13 @@ function handleUserInput() {
   console.log(currentQuestionIndex)
   switch (currentQuestions) {
     case freeMeasurementQuestions:
-      // if (currentQuestionIndex == 10) {
-      //   const tarpTypes = document.getElementById("tarpTypes")
-      //   // tarpTypes.addEventListener("change", handleUserInput)
-      //   var selectedTarp = tarpTypes.value
-      //   MeasurementHandler(selectedTarp)
-      // }
       MeasurementHandler(userMessage)
       break;
     case offerQuestions:
       OfferHandler(userMessage)
+      break;
+    case interestQuestions:
+      Interest(userMessage)
       break;
     case supportQuestions:
       Support(userMessage)
@@ -232,7 +199,6 @@ window.userInput = () => {
 };
 
 function handleMainMenuSelection(buttonId) {
-
   switch (buttonId) {
     case 0:
       currentQuestions = freeMeasurementQuestions;
@@ -277,6 +243,9 @@ export function askNextQuestion() {
       break;
     case supportQuestions:
       showSummary(supportDataArray, supportQuestions)
+      break;
+    case interestQuestions:
+      showSummary(interestDataArray, interestQuestions)
       break;
   }
 }

@@ -1,4 +1,4 @@
-import { measurementDatasArray, supportDataArray } from "./script.js";
+import { supportDataArray, measurementDatasArray, interestDataArray } from "./models/chatBotModels.js";
 
 const resultSummary = document.getElementById('resultContent');
 const resultDiv = document.getElementById('results')

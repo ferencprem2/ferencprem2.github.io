@@ -1,7 +1,11 @@
-import { askNextQuestion, addMessage, offerDatasArray, currentQuestionIndex, currentQuestions } from "./script.js";
+import { askNextQuestion, addMessage, currentQuestionIndex, currentQuestions } from "./script.js";
 import { offerQuestions, menuQuestions } from "./chatbotDatas/datas.js";
+import { offerDatasArray } from "./models/chatBotModels.js";
 
 let numberOfTarps;
+let tarpHeights = 0;
+let tarpWidths = 0;
+
 
 export const OfferHandler = (userMessage) => {
   if (currentQuestions === offerQuestions) {
@@ -52,7 +56,7 @@ export const OfferHandler = (userMessage) => {
         addMessage('Kérem valós számot adjon meg a szélességhez!', true);
         return;
       } else {
-        offerDatasArray.push(userMessage)
+        tarpWidths += userMessage;
       }
     }
 
@@ -62,7 +66,7 @@ export const OfferHandler = (userMessage) => {
         addMessage('Kérem valós számot adjon meg a magassághoz!', true);
         return;
       } else {
-        offerDatasArray.push(userMessage)
+        tarpHeights += userMessage
       }
     }
 
@@ -72,8 +76,6 @@ export const OfferHandler = (userMessage) => {
       if ((lowerCaseMessage != 'igen') && (lowerCaseMessage != 'nem')) {
         addMessage('Kérem igennel vagy nemmel válaszoljon', true);
         return;
-      } else {
-        offerDatasArray.push(lowerCaseMessage)
       }
     }
 
@@ -83,8 +85,6 @@ export const OfferHandler = (userMessage) => {
       if (!isNaN(numberMessage) || userMessage === "") {
         addMessage('Kérem színt adjon meg', true);
         return;
-      } else {
-        offerDatasArray.push(userMessage)
       }
     }
 
@@ -92,6 +92,7 @@ export const OfferHandler = (userMessage) => {
 
     // Check for return to main menu:
     askNextQuestion();
+    console.log("asda:", tarpHeights * tarpWidths)
     return;
   }
 }

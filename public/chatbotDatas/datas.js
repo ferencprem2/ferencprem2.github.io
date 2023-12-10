@@ -41,7 +41,7 @@ export const menuQuestions = [
     'Ajda meg a házszámát:',
     'Adja meg email címét:',
     'Adja meg telefonszámát:',
-    'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
+    'Adja meg a felmérés idejét:',
     'Válassza ki a ponyva típusát: '
   ];
   
@@ -51,7 +51,6 @@ export const menuQuestions = [
   ]
   
   export const interestQuestions = [
-    'Kérem írja le pontosan mit szeretne',
     'Adja meg a teljes nevét:',
     'Adja meg a megye nevét:',
     'Adja meg az irányítószámát:',
@@ -60,7 +59,7 @@ export const menuQuestions = [
     'Ajda meg a házszámát:',
     'Adja meg email címét:',
     'Adja meg telefonszámát:',
-    'Adja meg a felmérés idejét(ÉÉÉÉ-HH-NN):',
+    'Kérem írja le pontosan mit szeretne',
     'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
   ]
   
