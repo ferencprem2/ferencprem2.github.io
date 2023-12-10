@@ -28,3 +28,20 @@
 21:27:33 | 404 |       985.1µs |       127.0.0.1 | GET     | /favicon.ico         | Cannot GET /favicon.ico
 21:27:46 | 404 |         567µs |       127.0.0.1 | GET     | /PonyvaexpresszLogo.PNG  | Cannot GET /PonyvaexpresszLogo.PNG
 20:08:48 | 500 |     44.3488ms |       127.0.0.1 | POST    | /setMeasurementData 
+20:37:04 | 200 |    10.68148ms |       127.0.0.1 | GET     | /                   
+20:37:04 | 200 |     451.251µs |       127.0.0.1 | GET     | /assets/styles.css  
+20:37:04 | 200 |     181.119µs |       127.0.0.1 | GET     | /script.js          
+20:37:04 | 200 |     494.963µs |       127.0.0.1 | GET     | /resultSummary.js   
+20:37:04 | 200 |     185.485µs |       127.0.0.1 | GET     | /support.js         
+20:37:04 | 200 |     140.403µs |       127.0.0.1 | GET     | /offerHandler.js    
+20:37:04 | 200 |     111.954µs |       127.0.0.1 | GET     | /chatbotDatas/datas.js 
+20:37:04 | 200 |      316.52µs |       127.0.0.1 | GET     | /measurementHandler.js 
+20:37:04 | 200 |     127.624µs |       127.0.0.1 | GET     | /validators.js      
+20:37:04 | 200 |     128.712µs |       127.0.0.1 | GET     | /assets/PonyvaexpresszLogo.png 
+20:37:04 | 404 |     173.205µs |       127.0.0.1 | GET     | /favicon.ico         | Cannot GET /favicon.ico
+20:38:04 | 304 |     195.246µs |       127.0.0.1 | GET     | /                   
+20:38:04 | 200 |     130.832µs |       127.0.0.1 | GET     | /support.js         
+20:38:06 | 304 |      15.503µs |       127.0.0.1 | GET     | /                   
+20:38:06 | 304 |      17.637µs |       127.0.0.1 | GET     | /support.js         
+20:38:53 | 304 |     285.292µs |       127.0.0.1 | GET     | /                   
+20:38:53 | 200 |      90.591µs |       127.0.0.1 | GET     | /support.js         

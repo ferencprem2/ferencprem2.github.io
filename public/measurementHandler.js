@@ -43,7 +43,6 @@ export const MeasurementHandler = (userMessage) => {
             transformToDatepicker(inputField)
             break;
         case 9:
-            //TODO: Add ar so it works with lesser misunderstanding
             //Measurement Date
             validateDate(userMessage) ? (measurementDatasArray.measurementDate = userMessage, askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
             replaceInputWithSelect(inputField, tarpTypes)
