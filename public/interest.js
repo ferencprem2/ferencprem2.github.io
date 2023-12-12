@@ -1,7 +1,8 @@
-import { addMessage, askNextQuestion, currentQuestionIndex, replaceInputWithSelect, replaceSelectWithInput, transformToPhoneInput } from "./script.js";
+import { addMessage, askNextQuestion, currentQuestionIndex } from "./script.js";
 import { validateEmail, validatePhoneNumber, validateZipCode } from "./validators.js";
 import { hungarianCounties } from "./chatbotDatas/datas.js";
 import { interestDataArray } from "./models/chatBotModels.js";
+import { replaceInputWithSelect, replaceSelectWithInput, transformToPhoneInput } from "./helpers/helperFunctions.js";
 
 export const Interest = (userMessage) => {
     var inputField = document.getElementById("user-input");

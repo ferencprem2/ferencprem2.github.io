@@ -1,7 +1,8 @@
-import { askNextQuestion, addMessage, currentQuestionIndex, transformToDatepicker, resetToTextInput, replaceInputWithSelect, replaceSelectWithInput, transformToPhoneInput} from "./script.js";
+import { askNextQuestion, addMessage, currentQuestionIndex} from "./script.js";
 import { validateEmail, validatePhoneNumber, validateDate, validateZipCode } from "./validators.js";
 import { hungarianCounties, tarpTypes } from "./chatbotDatas/datas.js";
 import { measurementDatasArray } from "./models/chatBotModels.js";
+import { replaceInputWithSelect, replaceSelectWithInput, transformToDatepicker, transformToPhoneInput } from "./helpers/helperFunctions.js";
 
 export const MeasurementHandler = (userMessage) => {
     var inputField = document.getElementById("user-input");

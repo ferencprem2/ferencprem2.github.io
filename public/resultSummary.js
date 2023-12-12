@@ -1,5 +1,6 @@
 import { supportDataArray, measurementDatasArray, interestDataArray } from "./models/chatBotModels.js";
 
+//TODO: megcsinálni megint 
 const resultSummary = document.getElementById('resultContent');
 const resultDiv = document.getElementById('results')
 const doneButton = document.getElementById('sendButton')
