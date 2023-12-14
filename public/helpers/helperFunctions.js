@@ -1,3 +1,5 @@
+import { handleUserInput } from "../script.js";
+
 function enforcePhoneNumberFormat(event) {
     if (!event.target.value.startsWith('+36')) {
         event.target.value = '+36' + event.target.value.replace('+36', '').substring(0, 10);

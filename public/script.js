@@ -78,7 +78,7 @@ export function addMessage(message, isBot) {
 }
 
 //Function that handles the user inputs, and displays the questions referring to the user input
-function handleUserInput() {
+export function handleUserInput() {
   let parent = document.getElementsByClassName("user-input-parent")[0];
   let element = parent.children[0]
   let userMessage;
