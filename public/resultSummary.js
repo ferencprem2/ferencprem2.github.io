@@ -1,4 +1,5 @@
 import { supportDataArray, measurementDatasArray, interestDataArray } from "./models/chatBotModels.js";
+import { isOptionSelected } from "./script.js";
 
 //TODO: megcsinálni megint 
 const resultSummary = document.getElementById('resultContent');
@@ -39,6 +40,7 @@ export function showSummary(DataArray, questionArray) {
     
     doneButton.addEventListener('click', () => {
         //TODO: Confirmation for the datas, yes or no-
+        isOptionSelected = false;
         const URL = "http://localhost:8080/"
         switch(DataArray) {
             case measurementDatasArray: 

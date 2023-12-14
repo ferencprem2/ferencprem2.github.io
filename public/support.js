@@ -11,13 +11,11 @@ export const Support = (userMessage) => {
     switch (currentQuestionIndex) {
         case 1:
             //Name
-            userMessage.length == 0 ? addMessage("Kérem töltse ki a mezőt!", true) : (supportDataArray.name = userMessage, askNextQuestion())
-            replaceInputWithSelect(inputField, hungarianCounties)
+            userMessage.length == 0 ? addMessage("Kérem töltse ki a mezőt!", true) : (supportDataArray.name = userMessage, askNextQuestion(), replaceInputWithSelect(inputField, hungarianCounties))
             break;
         case 2:
             //County
-            !hungarianCounties.includes(userMessage) ? addMessage("Kérem létező megyét adjon meg!", true) : (supportDataArray.county = userMessage, askNextQuestion())
-            replaceSelectWithInput(inputField);
+            !hungarianCounties.includes(userMessage) ? addMessage("Kérem létező megyét adjon meg!", true) : (supportDataArray.county = userMessage, askNextQuestion(), replaceSelectWithInput(inputField))
             break;
         case 3:
             //Zip Code
@@ -37,13 +35,11 @@ export const Support = (userMessage) => {
             break;
         case 7:
             //Email
-            validateEmail(userMessage) ? (supportDataArray.email = userMessage, askNextQuestion()) : addMessage("Kérem létező email címet adjon meg!", true)
-            transformToPhoneInput(inputField)
+            validateEmail(userMessage) ? (supportDataArray.email = userMessage, askNextQuestion(), transformToPhoneInput(inputField)) : addMessage("Kérem létező email címet adjon meg!", true)
             break;
         case 8:
             //Phone Number
-            !validatePhoneNumber(userMessage) ? (supportDataArray.phoneNumber = userMessage, askNextQuestion()) : addMessage("Kérem valós telefonszámot adjon meg!", true)
-            replaceSelectWithInput(inputField)
+            !validatePhoneNumber(userMessage) ? (supportDataArray.phoneNumber = userMessage, askNextQuestion(), replaceSelectWithInput(inputField)) : addMessage("Kérem valós telefonszámot adjon meg!", true)
             break;
         case 9:
             //Custom data

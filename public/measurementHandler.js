@@ -11,13 +11,11 @@ export const MeasurementHandler = (userMessage) => {
     switch (currentQuestionIndex) {
         case 1:
             //Name
-            userMessage.length == 0 ? addMessage("Kérem töltse ki a mezőt!", true) : (measurementDatasArray.name = userMessage, askNextQuestion())
-            replaceInputWithSelect(inputField, hungarianCounties)
+            userMessage.length == 0 ? addMessage("Kérem töltse ki a mezőt!", true) : (measurementDatasArray.name = userMessage, askNextQuestion(), replaceInputWithSelect(inputField, hungarianCounties))
             break;
         case 2:
             //County
-            !hungarianCounties.includes(userMessage) ? addMessage("Kérem létező megyét adjon meg!", true) : (measurementDatasArray.county = userMessage, askNextQuestion())
-            replaceSelectWithInput(inputField);
+            !hungarianCounties.includes(userMessage) ? addMessage("Kérem létező megyét adjon meg!", true) : (measurementDatasArray.county = userMessage, askNextQuestion(), replaceSelectWithInput(inputField))
             break;
         case 3:
             //Zip Code
@@ -37,22 +35,19 @@ export const MeasurementHandler = (userMessage) => {
             break;
         case 7:
             //Email
-            validateEmail(userMessage) ? (measurementDatasArray.email = userMessage, askNextQuestion()) : addMessage("Kérem létező email címet adjon meg!", true)
-            transformToPhoneInput(inputField);
+            validateEmail(userMessage) ? (measurementDatasArray.email = userMessage, askNextQuestion(), transformToPhoneInput(inputField)) : addMessage("Kérem létező email címet adjon meg!", true)
             break;
         case 8:
             //Phone Number
-            !validatePhoneNumber(userMessage) ? (measurementDatasArray.phoneNumber = userMessage, askNextQuestion()) : addMessage("Kérem valós telefonszámot adjon meg!", true)
-            transformToDatepicker(inputField)
+            !validatePhoneNumber(userMessage) ? (measurementDatasArray.phoneNumber = userMessage, askNextQuestion(), transformToDatepicker(inputField)) : addMessage("Kérem valós telefonszámot adjon meg!", true)
             break;
         case 9:
             //Measurement Date
-            validateDate(userMessage) ? (measurementDatasArray.measurementDate = userMessage, askNextQuestion()) : addMessage("Kérem valós dátumot adjon meg!", true)
-            replaceInputWithSelect(inputField, tarpTypes)
+            validateDate(userMessage) ? (measurementDatasArray.measurementDate = userMessage, askNextQuestion(), replaceInputWithSelect(inputField, tarpTypes)) : addMessage("Kérem valós dátumot adjon meg!", true)
             break;
         case 10:
             //TarpTypes
-            userMessage.length > 0 ? (measurementDatasArray.tarpTypes = userMessage, askNextQuestion()) : addMessage("Tarp type error", true)
+            userMessage.length > 0 ? (measurementDatasArray.tarpTypes = userMessage, askNextQuestion(), replaceSelectWithInput(inputField)) : addMessage("Tarp type error", true)
             break;
     }
 }

@@ -14,6 +14,7 @@ const chatbox = document.querySelector('.chatbox');
 
 export let currentQuestions;
 export let currentQuestionIndex = 0;
+export let isOptionSelected = false;
 let clikced = false;
 
 
@@ -120,37 +121,50 @@ window.userInput = () => {
 };
 
 function handleMainMenuSelection(buttonId) {
-  switch (buttonId) {
-    case 0:
-      currentQuestions = freeMeasurementQuestions;
-      currentQuestionIndex = 0;
-      askNextQuestion();
-      break;
-    case 1:
-      currentQuestions = offerQuestions;
-      currentQuestionIndex = 0;
-      askNextQuestion();
-      break;
-    case 2:
-      currentQuestions = interestQuestions;
-      currentQuestionIndex = 0;
-      askNextQuestion();
-      break;
-    case 3:
-      currentQuestions = saleQuestions;
-      currentQuestionIndex = 0;
-      askNextQuestion();
-      break;
-    case 4:
-      currentQuestions = supportQuestions;
-      currentQuestionIndex = 0;
-      askNextQuestion();
-      break;
+  if (!isOptionSelected) {
+    switch (buttonId) {
+      case 0:
+        isOptionSelected = true;
+        currentQuestions = freeMeasurementQuestions;
+        currentQuestionIndex = 0;
+        askNextQuestion();
+        break;
+      case 1:
+        isOptionSelected = true;
+        currentQuestions = offerQuestions;
+        currentQuestionIndex = 0;
+        askNextQuestion();
+        break;
+      case 2:
+        isOptionSelected = true;
+        currentQuestions = interestQuestions;
+        currentQuestionIndex = 0;
+        askNextQuestion();
+        break;
+      case 3:
+        isOptionSelected = true;
+        currentQuestions = saleQuestions;
+        currentQuestionIndex = 0;
+        askNextQuestion();
+        break;
+      case 4:
+        isOptionSelected = true;
+        currentQuestions = supportQuestions;
+        currentQuestionIndex = 0;
+        askNextQuestion();
+        break;
+    }
   }
 }
 
 //function that goes to the next question
 export function askNextQuestion() {
+  if (isOptionSelected){
+    userInput.disabled = false;
+    sendBtn.disabled = false
+    userInput.focus()
+  }
+  
   if (currentQuestionIndex < currentQuestions.length) {
     addMessage(currentQuestions[currentQuestionIndex], true)
     currentQuestionIndex++;
@@ -175,4 +189,6 @@ export function askNextQuestion() {
 currentQuestions = menuQuestions;
 window.onload = function () {
   chatbox.style.display = 'none';
+  userInput.disabled = true;
+  sendBtn.disabled = true;
 };

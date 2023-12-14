@@ -14,6 +14,7 @@ export function transformToPhoneInput(inputField) {
     inputField.className
     // Additional logic to ensure that +36 is always present
     inputField.addEventListener('input', enforcePhoneNumberFormat);
+    inputField.focus();
 }
 
 //Transforms the input field into a datepicker
@@ -24,10 +25,11 @@ export function transformToDatepicker(inputField) {
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     let yyyy = today.getFullYear();
-
+    
     today = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
-
+    
     inputField.min = today; // Set the min attribute to today's date
+    inputField.focus();
 }
 
 //Replaces input field with a dropDown
@@ -49,9 +51,9 @@ export function replaceInputWithSelect(inputField, dataArray,) {
             handleUserInput();
         }
     });
-
     // Replace the input field with the select element in the DOM
     inputField.parentNode.replaceChild(select, inputField);
+    select.focus();
 }
 
 //Replaces the dropDown with an input filed
@@ -70,6 +72,7 @@ export function replaceSelectWithInput(selectElement) {
     });
     // Replace the select element with the input field in the DOM
     selectElement.parentNode.replaceChild(input, selectElement);
+    input.focus();
 }
 
 export function resetToTextInput(inputField) {
@@ -78,5 +81,6 @@ export function resetToTextInput(inputField) {
     inputField.placeholder = "Írja válaszát ide";
     inputField.removeAttribute('min'); // Remove min attribute if set
     inputField.removeAttribute('maxLength'); // Remove maxLength attribute if set
+    inputField.focus();
     // Remove any other attributes or event listeners specific to other input types
 }
