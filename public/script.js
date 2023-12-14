@@ -41,7 +41,7 @@ chatbotIcon.addEventListener('click', function () {
 
 //Decides whether the question is bot response or user response and puts the output into the corresponting container
 export function addMessage(message, isBot) {
-  if (currentQuestions != menuQuestions && message.length == 0 && currentQuestions == freeMeasurementQuestions && currentQuestionIndex != 10) {
+  if (currentQuestions != menuQuestions && message.length == 0) {
     message = "Kérem töltse ki a mezőt!";
     isBot = true;
   }
