@@ -1,11 +1,17 @@
 import { handleUserInput } from "../script.js";
 
 function enforcePhoneNumberFormat(event) {
-    if (!event.target.value.startsWith('+36')) {
-        event.target.value = '+36' + event.target.value.replace('+36', '').substring(0, 10);
-    }
-}
+    let value = event.target.value;
 
+    // Ensure the value starts with +36
+    if (!value.startsWith('+36')) {
+        value = '+36' + value.replace(/[^0-9]/g, '').slice(2);
+    } else {
+        value = '+36' + value.slice(3).replace(/[^0-9]/g, '');
+    }
+
+    event.target.value = value;
+}
 //Transforms input field to phone
 export function transformToPhoneInput(inputField) {
     inputField.type = 'tel';
@@ -19,16 +25,19 @@ export function transformToPhoneInput(inputField) {
 
 //Transforms the input field into a datepicker
 export function transformToDatepicker(inputField) {
-    inputField.removeEventListener('input', enforcePhoneNumberFormat)
+    inputField.removeEventListener('input', enforcePhoneNumberFormat);
     inputField.type = 'date';
+
     let today = new Date();
+    today.setDate(today.getDate() + 1); // Add one day to set the date to tomorrow
+
     let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     let yyyy = today.getFullYear();
-    
-    today = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
-    
-    inputField.min = today; // Set the min attribute to today's date
+
+    let tomorrow = yyyy + '-' + mm + '-' + dd; // Format date as YYYY-MM-DD
+
+    inputField.min = tomorrow; // Set the min attribute to tomorrow's date
     inputField.focus();
 }
 
