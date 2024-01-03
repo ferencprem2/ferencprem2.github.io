@@ -19,6 +19,29 @@ var ServerConfig *models.ServerConfig
 func main() {
 	var err error
 	ServerConfig = &models.ServerConfig{}
+
+	// Setup config
+	err = goco.InitializeConfig(ServerConfig)
+	if err != nil {
+		log.Fatalln("error while setup config", err)
+	}
+
+	log.Println("Config loaded..")
+
+	// Init DB
+	_, err = godab.ConnectAndCreate(&ServerConfig.DatabaseConfig)
+	if err != nil {
+		log.Fatalln("error while setup database", err)
+	}
+	defer godab.CloseConnection()
+
+	log.Println("Database loaded..")
+
+	logfile, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println("baj")
+	}
+
 	// Create the server
 	app := fiber.New()
 
@@ -38,29 +61,6 @@ func main() {
 	app.Use(logger.New())
 
 	log.Println("Logger enabled..")
-
-	// Setup config
-	err = goco.InitializeConfig(ServerConfig)
-	if err != nil {
-		log.Fatalln("error while setup config", err)
-	}
-
-	log.Println("Config loaded..")
-
-	// Setup database
-	// _, err = godab.OpenAndCreate(&ServerConfig.DatabaseConfig, "../assets/database.sql")
-
-	_, err = godab.Open(&ServerConfig.DatabaseConfig)
-	if err != nil {
-		log.Fatalln("error while setup database", err)
-	}
-
-	log.Println("Database loaded..")
-
-	logfile, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Println("baj")
-	}
 
 	app.Use(logger.New(logger.Config{
 		Output: logfile,

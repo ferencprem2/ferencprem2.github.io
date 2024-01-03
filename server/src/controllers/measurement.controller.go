@@ -9,12 +9,13 @@ import (
 )
 
 func Controller_Measurement(ctx *fiber.Ctx) error {
-	var measurement models.Measurement
+	measurement := models.Measurement{}
 
 	if err := ctx.BodyParser(&measurement); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
 
+	log.Println(measurement)
 	measurementId, err := database.AddMeasurement(measurement)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
