@@ -70,6 +70,7 @@ func main() {
 
 	app.Post("/setMeasurementData", controllers.Controller_Measurement)
 	app.Post("/setSupportData", controllers.Controller_SupportData)
+	app.Post("/setInterestData", controllers.Controller_InterestData)
 
 	log.Fatal(app.Listen(ServerConfig.GetPort()))
 	// log.Fatal(app.ListenTLS(ServerConfig.GetPort(), ServerConfig.CertFile, ServerConfig.KeyFile))
