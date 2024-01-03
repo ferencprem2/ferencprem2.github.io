@@ -1,5 +1,5 @@
 import { supportDataArray, measurementDatasArray, interestDataArray } from "./models/chatBotModels.js";
-import { isOptionSelected } from "./script.js";
+import { setIsOptionSelected } from "./script.js";
 
 //TODO: megcsinálni megint 
 const resultSummary = document.getElementById('resultContent');
@@ -40,8 +40,9 @@ export function showSummary(DataObject, questionArray) {
     })
     
     doneButton.addEventListener('click', () => {
-        //TODO: Confirmation for the datas, yes or no-
-        isOptionSelected = false;
+        console.log("done1");
+        setIsOptionSelected(false);
+        console.log("done2");
         const URL = "http://localhost:8080/"
         switch(DataObject) {
             case measurementDatasArray: 
@@ -51,6 +52,10 @@ export function showSummary(DataObject, questionArray) {
             case supportDataArray:
                 console.log("supAssd")
                 sendJsonData(supportDataArray, URL, "setSupportData")
+                break;
+            case interestDataArray:
+                console.log("interestASD");
+                sendJsonData(interestDataArray, URL, "setInterestData")
                 break;
         }
 

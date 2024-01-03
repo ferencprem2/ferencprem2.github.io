@@ -60,7 +60,7 @@ export const menuQuestions = [
     'Adja meg email címét:',
     'Adja meg telefonszámát:',
     'Kérem írja le pontosan mit szeretne',
-    'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
+    //'Köszünjük, hogy időt szánt ránk, munkatársunk mihamarabb keresni fogja'
   ]
   
   export const saleQuestions = [

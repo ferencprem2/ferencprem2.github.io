@@ -15,8 +15,10 @@ const chatbox = document.querySelector('.chatbox');
 export let currentQuestions;
 export let currentQuestionIndex = 0;
 export let isOptionSelected = false;
-let clikced = false;
 
+export function setIsOptionSelected(value){
+  isOptionSelected = value
+}
 
 //Send button and send with enter key
 sendBtn.addEventListener('click', handleUserInput);
